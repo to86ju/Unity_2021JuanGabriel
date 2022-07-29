@@ -10,7 +10,7 @@ public class WaveManager : MonoBehaviour
 
     public UnityEvent onWaveChanged;//EVENTO de cambio de oleada
 
-    private int maxWaves;
+    private int maxWaves;//total de oleadas
 
     //Geter con la cantidad de oleadas
     public int WavesCount
@@ -18,6 +18,7 @@ public class WaveManager : MonoBehaviour
         get => waves.Count;
     }
 
+    //Geter total de oleadas
     public int MaxWaves
     {
         get => maxWaves;
@@ -40,7 +41,7 @@ public class WaveManager : MonoBehaviour
     //funcion para añadir oleadas a la lista
     public void AddWave(WaveSpawner waveAdd)
     {
-        maxWaves++;
+        maxWaves++;//añadir oleada al variable oleadas maximas
         waves.Add(waveAdd);
         onWaveChanged.Invoke();//lanzar evento Lanzar oleada
     }

@@ -12,7 +12,7 @@ public class PlayerShooting : MonoBehaviour
 
     private Animator _animator;
 
-    public int bulletsAmount;
+    public int bulletsAmount;//cantidad de balas
 
     private void Awake()
     {
@@ -24,14 +24,15 @@ public class PlayerShooting : MonoBehaviour
     {
         //-------------Disparar la bala----------------
 
-        //Si pulsamos el boton de raton izquierdo y el juego esta parado
+        //Si pulsamos el boton de raton izquierdo y el juego no esta parado
         if (Input.GetKeyDown(KeyCode.Mouse0) && Time.timeScale > 0)
         {
             _animator.SetTrigger("Shot Bullet");
 
+            //Si nos quenda balas
             if (bulletsAmount > 0)
             {
-                Invoke("FireBullet", 0.25f);
+                Invoke("FireBullet", 0.25f);//disparar
             }
             
         }
@@ -52,10 +53,11 @@ public class PlayerShooting : MonoBehaviour
 
         bullet.SetActive(true);//activar la bala en pantalla
 
+        bulletsAmount--;//restar balas disparadas
+
         fireEffect.Play();
         Instantiate(shootSound, transform.position, transform.rotation).GetComponent<AudioSource>().Play();
 
-        bulletsAmount--;
 
         if (bulletsAmount <0)
         {

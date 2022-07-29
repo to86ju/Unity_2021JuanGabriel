@@ -20,6 +20,7 @@ public class LifeBar : MonoBehaviour
 
     private void Update()
     {
+        //barra de vida
         _image.fillAmount = targetLife.Amount/targetLife.maximumLife;
     }
 }

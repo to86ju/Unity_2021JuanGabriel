@@ -1794,7 +1794,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerLife: {fileID: 1036059053}
-  baseLife: {fileID: 0}
+  baseLife: {fileID: 301393070}
 --- !u!4 &46162550
 Transform:
   m_ObjectHideFlags: 0
@@ -1897,7 +1897,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4f1ffd991c525e42accee79969f6e80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetLife: {fileID: 0}
+  targetLife: {fileID: 301393070}
 --- !u!4 &110552530 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 534967304441753207, guid: e09a771166edf0f47ad402f2fdc4916e, type: 3}
@@ -1981,7 +1981,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 113755216}
-  m_LocalRotation: {x: 0.14973749, y: 0.000000011589692, z: -0.0000000017551999, w: 0.9887258}
+  m_LocalRotation: {x: 0.14973746, y: -0.000000031663625, z: 0.000000004795294, w: 0.9887258}
   m_LocalPosition: {x: 64, y: 56.09, z: 59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -8380,11 +8380,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: aa7c614b96afe49d396aa651ff412ae1, type: 3}
-    m_FontSize: 40
+    m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
-    m_MaxSize: 40
+    m_MaxSize: 70
     m_Alignment: 2
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -13243,7 +13243,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -30, y: -96}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 240, y: 60}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &616464645
 MonoBehaviour:
@@ -13292,7 +13292,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 29.05
+  m_fontSize: 37.65
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -13354,7 +13354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d733cd9e1a798f48887c80a9e4eccbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetShooting: {fileID: 0}
+  targetShooting: {fileID: 1440782570}
 --- !u!1 &655816592
 GameObject:
   m_ObjectHideFlags: 3
@@ -18181,7 +18181,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -30, y: -30}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 250, y: 50}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1220090676
 MonoBehaviour:
@@ -18230,7 +18230,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42.6
+  m_fontSize: 53.25
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -18759,7 +18759,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332637075}
-  m_LocalRotation: {x: 0.14973749, y: 0.000000011589692, z: -0.0000000017551999, w: 0.9887258}
+  m_LocalRotation: {x: 0.14973746, y: -0.000000031663625, z: 0.000000004795294, w: 0.9887258}
   m_LocalPosition: {x: 64, y: 56.09, z: 59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -19210,6 +19210,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 28
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1440782570 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7064354912835133135, guid: 8e1ebae093877c24a9a14d211debaf70, type: 3}
+  m_PrefabInstance: {fileID: 248999436}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7c73a1180d392e4ca6e2c285964aa4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1510926925
 GameObject:
   m_ObjectHideFlags: 0
@@ -19704,7 +19715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4f1ffd991c525e42accee79969f6e80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetLife: {fileID: 0}
+  targetLife: {fileID: 1036059053}
 --- !u!1 &1696442960
 GameObject:
   m_ObjectHideFlags: 0

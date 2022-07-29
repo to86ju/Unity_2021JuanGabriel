@@ -8,7 +8,7 @@ public class life : MonoBehaviour
     [SerializeField]
     private float amount;//puntos de vida
 
-    public float maximumLife = 100f;
+    public float maximumLife = 100f;//vida maxima
     public UnityEvent onDeath;//Evento muerte
     
     public float Amount
@@ -27,7 +27,7 @@ public class life : MonoBehaviour
 
     private void Awake()
     {
-        amount = maximumLife;
+        amount = maximumLife;//cantidad inicial de vida del jugador
     }
 
 }

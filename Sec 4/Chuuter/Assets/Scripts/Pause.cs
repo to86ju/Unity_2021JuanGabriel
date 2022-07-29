@@ -17,17 +17,19 @@ public class Pause : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        //si pulsamos la tecla q
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
 
             pauseMenu.SetActive(true);
-            Time.timeScale = 0;
+            Time.timeScale = 0;//Parar el juego
 
         }
     }
 
+    //funcion para poder volver al juego
     public void ResumenGame()
     {
         pauseMenu.SetActive(false);
@@ -36,6 +38,7 @@ public class Pause : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    //funcion para salir de juego
     private void ExitGame()
     {
         print("Ejecucion finalizada");

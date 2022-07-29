@@ -36,9 +36,10 @@ public class GameModeWaves : MonoBehaviour
     {
 
         //Ganar
+        //Si no hay enemigos en la escena  y no existen oleadas
         if (EnemyManager.SharedInstance.Enemycount <= 0 && WaveManager.ShareInstance.WavesCount <= 0)
         {
-            Debug.Log("gane");
+            //Debug.Log("gane");
             RegisterScore();
             SceneManager.LoadScene("WinScene", LoadSceneMode.Single);
         }

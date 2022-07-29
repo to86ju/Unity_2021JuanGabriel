@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    public static ScoreManager ShareInstance;
+    public static ScoreManager ShareInstance;//singleton
 
     [SerializeField]
     [Tooltip("Cantidad de putnos de la partida actual")]
@@ -14,9 +14,10 @@ public class ScoreManager : MonoBehaviour
 
     private void Awake()
     {
-        if(ShareInstance == null)
+        //si el ShareInstance es nulo
+        if (ShareInstance == null)
         {
-            ShareInstance = this;
+            ShareInstance = this;//crear el ShareInstance
         }
         else
         {

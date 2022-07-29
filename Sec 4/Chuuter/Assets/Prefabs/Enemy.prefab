@@ -47,6 +47,19 @@ MonoBehaviour:
   onDeath:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &301570110689329807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5145322790111010492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19f189099f40c3a4ca9b52ab67c50eb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointsAmount: 100
 --- !u!1001 &3250024631390712516
 PrefabInstance:
   m_ObjectHideFlags: 0

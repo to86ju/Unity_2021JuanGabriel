@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        EnemyManager.SharedInstance.AddEnemy(this);
+        EnemyManager.SharedInstance.AddEnemy(this);//añademe a la lista de enemigos
     }
 
     //funcion para destruir el enemigo si no tiene vida
@@ -32,7 +32,7 @@ public class Enemy : MonoBehaviour
 
         Destroy(gameObject, 1);
 
-        EnemyManager.SharedInstance.RemoveEnemy(this);
+        EnemyManager.SharedInstance.RemoveEnemy(this);//quitame de la lista de enemigos
         ScoreManager.ShareInstance.Amount += pointsAmount;
     }
 

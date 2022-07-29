@@ -8,10 +8,11 @@ public class WaveManager : MonoBehaviour
     public static WaveManager ShareInstance;//singleton
     private List<WaveSpawner> waves;
 
-    public UnityEvent onWaveChanged;//EVENTO
+    public UnityEvent onWaveChanged;//EVENTO de cambio de oleada
 
     private int maxWaves;
 
+    //Geter con la cantidad de oleadas
     public int WavesCount
     {
         get => waves.Count;
@@ -36,16 +37,18 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+    //funcion para añadir oleadas a la lista
     public void AddWave(WaveSpawner waveAdd)
     {
         maxWaves++;
         waves.Add(waveAdd);
-        onWaveChanged.Invoke();//lanzar evento
+        onWaveChanged.Invoke();//lanzar evento Lanzar oleada
     }
 
+    //funcion para quitar oleadas de la lista
     public void RemoveWave(WaveSpawner waveremo)
     {
         waves.Remove(waveremo);
-        onWaveChanged.Invoke();//Lanzar evento
+        onWaveChanged.Invoke();//Lanzar evento matar oleada
     }
 }

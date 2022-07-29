@@ -20,8 +20,8 @@ public class GameModeWaves : MonoBehaviour
 
     private void Start()
     {
-        EnemyManager.SharedInstance.onEnemyChyanged.AddListener(CheckWinCondition);//listener o vinculacion
-        WaveManager.ShareInstance.onWaveChanged.AddListener(CheckWinCondition);//listener o vinculacion
+        EnemyManager.SharedInstance.onEnemyChyanged.AddListener(CheckWinCondition);//listener o vinculacion para cambiar la lista enemigo
+        WaveManager.ShareInstance.onWaveChanged.AddListener(CheckWinCondition);//listener o vinculacion para cambiar la lista oleadas
     }
 
     //funcion para saber si el juegador a muerto

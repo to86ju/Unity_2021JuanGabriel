@@ -10,8 +10,9 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]
     private List<Enemy> enemies;
 
-    public UnityEvent onEnemyChyanged;//evento
+    public UnityEvent onEnemyChyanged;//evento cambio de enemgo
 
+    //geter para obtener cantidad de enemigos
     public int Enemycount
     {
         get => enemies.Count;
@@ -31,15 +32,17 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    //funcion para añadir enemgos a la escena
     public void AddEnemy(Enemy enemyadd)
     {
         enemies.Add(enemyadd);
-        onEnemyChyanged.Invoke();//Lanzar evento
+        onEnemyChyanged.Invoke();//Lanzar evento añadir enemigo de la lista
     }
 
+    //funcion para quitar enemigos a la escena
     public void RemoveEnemy(Enemy enemyremo)
     {
         enemies.Remove(enemyremo);
-        onEnemyChyanged.Invoke();//Lanzar evento
+        onEnemyChyanged.Invoke();//Lanzar evento quitar enemigo de la lista
     }
 }

@@ -9,7 +9,7 @@ public class life : MonoBehaviour
     private float amount;//puntos de vida
 
     public float maximumLife = 100f;
-    public UnityEvent onDeath;//Evento
+    public UnityEvent onDeath;//Evento muerte
     
     public float Amount
     {
@@ -19,7 +19,7 @@ public class life : MonoBehaviour
 
             if(amount <= 0)
             {
-                onDeath.Invoke();//Lanzar evento
+                onDeath.Invoke();//Lanzar evento de muerte
             }
         }
       

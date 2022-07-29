@@ -13,8 +13,8 @@ public class GameModeWaves : MonoBehaviour
 
     private void Awake()
     {
-        playerLife.onDeath.AddListener(CheckLoseCondition);//listener o vinculacion
-        baseLife.onDeath.AddListener(CheckLoseCondition);//listener o vinculacion
+        playerLife.onDeath.AddListener(CheckLoseCondition);//listener o vinculacion evento muerte del player
+        baseLife.onDeath.AddListener(CheckLoseCondition);//listener o vinculacion evento muerte de la base
 
     }
 
@@ -24,18 +24,21 @@ public class GameModeWaves : MonoBehaviour
         WaveManager.ShareInstance.onWaveChanged.AddListener(CheckWinCondition);//listener o vinculacion
     }
 
+    //funcion para saber si el juegador a muerto
     void CheckLoseCondition()
     {
         RegisterScore();
         SceneManager.LoadScene("LoseScene", LoadSceneMode.Single);
     }
 
+    //funcion para saber si el jugador a ganado el juego
     void CheckWinCondition()
     {
 
         //Ganar
         if (EnemyManager.SharedInstance.Enemycount <= 0 && WaveManager.ShareInstance.WavesCount <= 0)
         {
+            Debug.Log("gane");
             RegisterScore();
             SceneManager.LoadScene("WinScene", LoadSceneMode.Single);
         }

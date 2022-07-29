@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class WaveManager : MonoBehaviour
 {
-    public static WaveManager ShareInstance;
+    public static WaveManager ShareInstance;//singleton
     private List<WaveSpawner> waves;
 
     public UnityEvent onWaveChanged;//EVENTO
@@ -24,9 +24,10 @@ public class WaveManager : MonoBehaviour
 
     private void Awake()
     {
-        if(ShareInstance == null)
+        //si el ShareInstance es nula
+        if (ShareInstance == null)
         {
-            ShareInstance = this;
+            ShareInstance = this;//crear ShareInstance
             waves = new List<WaveSpawner>();
         }
         else

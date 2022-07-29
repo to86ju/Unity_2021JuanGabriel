@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class EnemyManager : MonoBehaviour
 {
-    public static EnemyManager SharedInstance;
+    public static EnemyManager SharedInstance;//Singleton
 
     [SerializeField]
     private List<Enemy> enemies;
@@ -19,9 +19,10 @@ public class EnemyManager : MonoBehaviour
 
     private void Awake()
     {
-        if(SharedInstance == null)
+        //si el SharedInstance es nula
+        if (SharedInstance == null)
         {
-            SharedInstance = this;
+            SharedInstance = this; //crear SharedInstance
             enemies = new List<Enemy>();
         }
         else

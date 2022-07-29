@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [Tooltip("Cantidad de putnos que se obtienen al derrotar al ememigo")]
+    [Tooltip("Cantidad de puntos que se obtienen al derrotar al ememigo")]
     public int pointsAmount = 10;
 
     private void Awake()
     {
         var life = GetComponent<life>();
-        life.onDeath.AddListener(DestroyEnemy);//listener o viculacion
+        life.onDeath.AddListener(DestroyEnemy);//listener o viculacion evento muerte enemigo
     }
 
 
@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
         EnemyManager.SharedInstance.AddEnemy(this);
     }
 
+    //funcion para destruir el enemigo si no tiene vida
     private void DestroyEnemy()
     {
         Animator anim = GetComponent<Animator>();
@@ -35,6 +36,7 @@ public class Enemy : MonoBehaviour
         ScoreManager.ShareInstance.Amount += pointsAmount;
     }
 
+    //funcion para ejecutar una explosion en pantalla
     void PlayDestruction()
     {
         ParticleSystem explosion = gameObject.GetComponentInChildren<ParticleSystem>();

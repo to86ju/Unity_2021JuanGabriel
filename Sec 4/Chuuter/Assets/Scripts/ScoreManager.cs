@@ -7,7 +7,7 @@ public class ScoreManager : MonoBehaviour
     public static ScoreManager ShareInstance;//singleton
 
     [SerializeField]
-    [Tooltip("Cantidad de putnos de la partida actual")]
+    [Tooltip("Cantidad de puntos de la partida actual")]
     private int amount;
 
     public int Amount { get => amount; set => amount = value; }

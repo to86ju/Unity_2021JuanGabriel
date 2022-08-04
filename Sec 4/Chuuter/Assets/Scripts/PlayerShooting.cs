@@ -13,6 +13,8 @@ public class PlayerShooting : MonoBehaviour
     private Animator _animator;
 
     public int bulletsAmount;//cantidad de balas
+    public float fireRate = 0.5f;
+    private float lastShootTime;
 
     private void Awake()
     {
@@ -27,14 +29,26 @@ public class PlayerShooting : MonoBehaviour
         //Si pulsamos el boton de raton izquierdo y el juego no esta parado
         if (Input.GetKeyDown(KeyCode.Mouse0) && Time.timeScale > 0)
         {
-            _animator.SetTrigger("Shot Bullet");
+            //_animator.SetTrigger("Shot Bullet");
+            _animator.SetBool("Shot Bullet Bool",true);
 
             //Si nos quenda balas
             if (bulletsAmount > 0)
             {
+                var timeSincelastShot = Time.time - lastShootTime;
+                if (timeSincelastShot < fireRate)
+                {
+                    return;
+                }
+                lastShootTime = Time.time;
+
                 Invoke("FireBullet", 0.25f);//disparar
             }
             
+        }
+        else
+        {
+            _animator.SetBool("Shot Bullet Bool", false);
         }
         //-----------------------------------------------
     }
@@ -55,13 +69,16 @@ public class PlayerShooting : MonoBehaviour
 
         bulletsAmount--;//restar balas disparadas
 
-        fireEffect.Play();
-        Instantiate(shootSound, transform.position, transform.rotation).GetComponent<AudioSource>().Play();
-
-
+        //si no tengo balas
         if (bulletsAmount <0)
         {
+            //balas igual a 0
             bulletsAmount = 0;
         }
+
+        //----- efecto de disparo y sonido--------------
+        fireEffect.Play();
+        Instantiate(shootSound, transform.position, transform.rotation).GetComponent<AudioSource>().Play();
+        //------------------------------------
     }
 }

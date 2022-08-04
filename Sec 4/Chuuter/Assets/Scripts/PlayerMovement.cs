@@ -51,7 +51,10 @@ public class PlayerMovement : MonoBehaviour
         _rb.AddRelativeTorque(0, mouseX * angle, 0);
         //-------------------------
 
+        //----- movimiento animacion -------
         _animator.SetFloat("Velocity", _rb.velocity.magnitude);
+
+        //----------------------------------
 
         /*
         _animator.SetFloat("MoveX", horizontal);

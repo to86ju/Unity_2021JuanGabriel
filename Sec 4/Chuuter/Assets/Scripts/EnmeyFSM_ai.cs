@@ -6,12 +6,13 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Sight_ai))]
 public class EnmeyFSM_ai : MonoBehaviour
 {
+    //Estados de los enemigos
     public enum EnemyState { Gotobase, AttackBase, ChasePlayer, AttackPlayer}
 
 
-    public EnemyState currentState;
+    public EnemyState currentState;//Esado actual
 
-    private Sight_ai _sight;
+    private Sight_ai _sight;// visor de la ia
 
     private Transform baseTransform;
 
@@ -40,15 +41,19 @@ public class EnmeyFSM_ai : MonoBehaviour
         switch (currentState)
         {
             case EnemyState.Gotobase:
+                //ir a por la base
                 GotoBase();
                 break;
             case EnemyState.AttackBase:
+                //atacar a la base
                 AttackBase();
                 break;
             case EnemyState.ChasePlayer:
+                //ir a por el jugador
                 ChasePlayer();
                 break;
             case EnemyState.AttackPlayer:
+                //atacar al jugador
                 AttackPlayer();
                 break;
 
@@ -58,59 +63,75 @@ public class EnmeyFSM_ai : MonoBehaviour
 
     }
 
+    //funcion ir a base
     void GotoBase()
     {
         print("Ir a base");
 
-        agent.isStopped = false;
-        agent.SetDestination(baseTransform.position);
+        agent.isStopped = false;//seguir el enemigo
+        agent.SetDestination(baseTransform.position);//dirigite a la base
 
+        //Si el ia detecta un objetivo(
         if (_sight.detectedTarget != null)
         {
-            currentState = EnemyState.ChasePlayer;
+            currentState = EnemyState.ChasePlayer;//Cambio estado: ir a por el jugador
         }
 
+        //distancia hacia la base
         float distaceToBase = Vector3.Distance(transform.position, baseTransform.position);
+
+        //si esto muy cerca de la base
         if (distaceToBase < baseAttackDistance)
         {
-            currentState = EnemyState.AttackBase;
+            currentState = EnemyState.AttackBase;//cambio estado: Atacar a la base
         }
     }
 
+    //funcion atacar la base
     void AttackBase()
     {
         print("Atacar la base enemiga");
-        agent.isStopped = true;
+        agent.isStopped = true;//para el enemigo
         LookAt(baseTransform.position);
         ShootTarget();
     }
 
+    //Funcion ir al por el jugador
     void ChasePlayer()
     {
         print("Persiguir al jugador");
+
+        //Si el ia no detecta un objetivo
         if (_sight.detectedTarget == null)
         {
-            currentState = EnemyState.Gotobase;
+            currentState = EnemyState.Gotobase;//Cambiar el estado: ir a base
             return;
         }
 
-        agent.isStopped = false;
+        agent.isStopped = false;//seguir el enemigo
         agent.SetDestination(_sight.detectedTarget.transform.position);
 
+        //distancia hacia el jugador
         float distanceToPlayer = Vector3.Distance(transform.position, _sight.detectedTarget.transform.position);
+
+        //si estoy cerca del jugador
         if (distanceToPlayer < playerAttackDistance)
         {
+            //cambiar el estado: Atacar al jugador
             currentState = EnemyState.AttackPlayer;
         }
     }
 
+    //funcion atacar al jugador
     void AttackPlayer()
     {
         print("Atacar al jugador");
-        agent.isStopped = true;
+        agent.isStopped = true;//Parar el enemigo
 
+        //Si el ia no detecta un objetivo
         if (_sight.detectedTarget == null)
         {
+            //cambiar estado: ir a la base
             currentState = EnemyState.Gotobase;
             return;
         }
@@ -119,10 +140,13 @@ public class EnmeyFSM_ai : MonoBehaviour
 
         ShootTarget();
 
+        //distancia hacia el jugador
         float distanceToPlayer = Vector3.Distance(transform.position, _sight.detectedTarget.transform.position);
+
+        //si estoy cerca del jugador un 10% mas
         if (distanceToPlayer > playerAttackDistance*1.1f)
         {
-            currentState = EnemyState.ChasePlayer;
+            currentState = EnemyState.ChasePlayer;//cambia estado. ir a por el jugador
         }
     }
 

@@ -5,17 +5,17 @@ using UnityEngine;
 public class Sight_ai : MonoBehaviour
 {
 
-    public float distance;
-    public float angle;
+    public float distance;//Distancia de vision
+    public float angle;//angulo de vision
 
-    public LayerMask targetLayers;
-    public LayerMask obstacleLayers;
+    public LayerMask targetLayers;//Enemigos(player y base)
+    public LayerMask obstacleLayers;//obtaculos 
 
     public Collider detectedTarget;
 
     private void Update()
     {
-        
+        //colecion de enemigos(player o base)
         Collider[] colliders = Physics.OverlapSphere(transform.position, distance, targetLayers);
 
         detectedTarget = null;
@@ -23,9 +23,10 @@ public class Sight_ai : MonoBehaviour
         //Hemos pasado el primer filtro: La distancia
         foreach (Collider collider in colliders)
         {
+            //direción al collider
             Vector3 directionToCollider = Vector3.Normalize(collider.bounds.center - transform.position);
 
-            //Angulo que forma el vector vsión con el vector objetivo
+            //Angulo que forma el vector visión con el vector objetivo
             float angleToCollider = Vector3.Angle(transform.forward, directionToCollider);
             //cos(angle) = u.v / ||u||.||v||
 
@@ -41,7 +42,7 @@ public class Sight_ai : MonoBehaviour
                     Debug.Log("player");
                     detectedTarget = collider;
 
-                    break;
+                    break;//salir en el primero que se cumpla
                 }
                 else
                 {
@@ -55,14 +56,18 @@ public class Sight_ai : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        //------------ distancia --------------------------
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, distance);
+        //-------------------------------------------------
 
+        //---------- cono de vision ---------------------
         Gizmos.color = Color.magenta;
         Vector3 rightDir = Quaternion.Euler(0, angle, 0)*transform.forward;
         Vector3 leftDit = Quaternion.Euler(0,-angle,0)*transform.forward;
         Gizmos.DrawRay(transform.position, rightDir * distance);
         Gizmos.DrawRay(transform.position, leftDit * distance);
+        //-----------------------------------------------
     }
 
 }

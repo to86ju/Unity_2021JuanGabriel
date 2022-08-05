@@ -68,6 +68,8 @@ public class EnmeyFSM_ai : MonoBehaviour
     {
         print("Ir a base");
 
+        animator.SetBool("Shot Bullet Bool", true);
+
         agent.isStopped = false;//seguir el enemigo
         agent.SetDestination(baseTransform.position);//dirigite a la base
 
@@ -99,6 +101,8 @@ public class EnmeyFSM_ai : MonoBehaviour
     //Funcion ir al por el jugador
     void ChasePlayer()
     {
+        animator.SetBool("Shot Bullet Bool", false);
+
         print("Persiguir al jugador");
 
         //Si el ia no detecta un objetivo
@@ -150,10 +154,13 @@ public class EnmeyFSM_ai : MonoBehaviour
         }
     }
 
+    //metodo para disparar al objetivo(base o jugador)
     void ShootTarget()
     {
+        //Si no estamos en pausa
         if (Time.timeScale > 0)
         {
+            //Momento desde el ultimo disparo
             var timeSinceLastShoot = Time.time - lastShootTime;
 
             if (timeSinceLastShoot < shootRate)
@@ -161,9 +168,12 @@ public class EnmeyFSM_ai : MonoBehaviour
                 return;
             }
 
-            animator.SetTrigger("Shot Bullet");
+            //animator.SetTrigger("Shot Bullet");
+            animator.SetBool("Shot Bullet Bool", true);
 
             lastShootTime = Time.time;
+
+            //-------- instancia de la bala-------------------------
             var bulllet = ObjectPool.SharedInstance.GetFirstPooledObject();
             bulllet.layer = LayerMask.NameToLayer("Enemy Bullet");
 
@@ -171,9 +181,11 @@ public class EnmeyFSM_ai : MonoBehaviour
             bulllet.transform.rotation = shootingPoint.transform.rotation;
 
             bulllet.SetActive(true);
+            //-------------------------------------------------------
         }
     }
 
+    //Metodo para mirar al objetivo
     void LookAt(Vector3 targetPos)
     {
         var directionToLook = Vector3.Normalize( targetPos - transform.position);

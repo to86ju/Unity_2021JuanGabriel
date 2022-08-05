@@ -2533,6 +2533,10 @@ PrefabInstance:
       value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7064354912835133135, guid: 8e1ebae093877c24a9a14d211debaf70, type: 3}
+      propertyPath: weapon
+      value: 
+      objectReference: {fileID: 1726728370}
+    - target: {fileID: 7064354912835133135, guid: 8e1ebae093877c24a9a14d211debaf70, type: 3}
       propertyPath: fireEffect
       value: 
       objectReference: {fileID: 1270284167}
@@ -8086,7 +8090,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 458102733}
-  m_LocalRotation: {x: 0.049349982, y: -0.7129412, z: 0.05043057, w: 0.69766486}
+  m_LocalRotation: {x: 0.04934998, y: -0.7129412, z: 0.05043057, w: 0.69766486}
   m_LocalPosition: {x: 81.815704, y: 55.1, z: 45.572723}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -8221,6 +8225,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &548865342 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7918131999117942829, guid: 8e1ebae093877c24a9a14d211debaf70, type: 3}
+  m_PrefabInstance: {fileID: 248999436}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &563676240
 GameObject:
   m_ObjectHideFlags: 0
@@ -17448,7 +17457,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 6717999501581445855, guid: ab79bf51bbcf68047a899e302dd44c86, type: 2}
   m_audioClip: {fileID: 8300000, guid: 36a9d39c97d918642a7109c1aa2d615f, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -20176,6 +20185,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1719573093}
   m_CullTransparentMesh: 1
+--- !u!1 &1726728369 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1182119096020082183, guid: 8e1ebae093877c24a9a14d211debaf70, type: 3}
+  m_PrefabInstance: {fileID: 248999436}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1726728370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1726728369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 340e704f372fad9469c93bc6a594784c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shootRate: 0.5
+  shootingPoint: {fileID: 548865342}
+  fireEffect: {fileID: 1270284167}
+  shootSound: {fileID: 5039848226223915373, guid: e4f7b76df33cf0f4a92e2277d7d171cc, type: 3}
 --- !u!1 &1733803184
 GameObject:
   m_ObjectHideFlags: 0

@@ -187,8 +187,7 @@ MonoBehaviour:
   currentState: 0
   baseAttackDistance: 2
   playerAttackDistance: 3
-  shootRate: 1
-  shootingPoint: {fileID: 1635070476773949298}
+  weapon: {fileID: 3089654860208503405}
 --- !u!54 &342636569557338146
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -283,6 +282,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57c0261cf161fc54c98dabd35017acba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3089654860208503405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5145322790111010546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 340e704f372fad9469c93bc6a594784c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shootRate: 1
+  shootingPoint: {fileID: 1635070476773949298}
+  fireEffect: {fileID: 0}
+  shootSound: {fileID: 5039848226223915373, guid: e4f7b76df33cf0f4a92e2277d7d171cc, type: 3}
 --- !u!1 &7879721534125043992
 GameObject:
   m_ObjectHideFlags: 0
@@ -460,6 +475,11 @@ GameObject:
 --- !u!4 &5145322790111298204 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7673487251499544664, guid: c98043d57e0190845b790d7b92990bee, type: 3}
+  m_PrefabInstance: {fileID: 3250024631390712516}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5145322790111010546 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7673487251499248694, guid: c98043d57e0190845b790d7b92990bee, type: 3}
   m_PrefabInstance: {fileID: 3250024631390712516}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &5145322790111298216 stripped

@@ -22,10 +22,7 @@ public class EnmeyFSM_ai : MonoBehaviour
 
     private Animator animator;
 
-    private float lastShootTime;
-    public float shootRate;
-
-    public GameObject shootingPoint;
+    public Weapon weapon;
 
     private void Awake()
     {
@@ -157,32 +154,11 @@ public class EnmeyFSM_ai : MonoBehaviour
     //metodo para disparar al objetivo(base o jugador)
     void ShootTarget()
     {
-        //Si no estamos en pausa
-        if (Time.timeScale > 0)
+        if (weapon.ShootBullet("Enemy Bullet",0))
         {
-            //Momento desde el ultimo disparo
-            var timeSinceLastShoot = Time.time - lastShootTime;
-
-            if (timeSinceLastShoot < shootRate)
-            {
-                return;
-            }
-
-            //animator.SetTrigger("Shot Bullet");
             animator.SetBool("Shot Bullet Bool", true);
-
-            lastShootTime = Time.time;
-
-            //-------- instancia de la bala-------------------------
-            var bulllet = ObjectPool.SharedInstance.GetFirstPooledObject();
-            bulllet.layer = LayerMask.NameToLayer("Enemy Bullet");
-
-            bulllet.transform.position = shootingPoint.transform.position;
-            bulllet.transform.rotation = shootingPoint.transform.rotation;
-
-            bulllet.SetActive(true);
-            //-------------------------------------------------------
         }
+        
     }
 
     //Metodo para mirar al objetivo

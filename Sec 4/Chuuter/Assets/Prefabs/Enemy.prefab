@@ -89,6 +89,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetLife: {fileID: -7186990107908687253}
+--- !u!1 &1635070476773949298
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7491821128049299116}
+  m_Layer: 0
+  m_Name: shootingPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7491821128049299116
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635070476773949298}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -112.5, y: 4.2, z: -9.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5145322790111298216}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &2406429663645621171
 GameObject:
   m_ObjectHideFlags: 0
@@ -158,7 +188,7 @@ MonoBehaviour:
   baseAttackDistance: 2
   playerAttackDistance: 3
   shootRate: 1
-  shootingPoint: {fileID: 0}
+  shootingPoint: {fileID: 1635070476773949298}
 --- !u!54 &342636569557338146
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -201,8 +231,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4a392aab9ef1514dbf6a6ddc000290c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 100
-  maximumLife: 100
+  amount: 10
+  maximumLife: 10
   onDeath:
     m_PersistentCalls:
       m_Calls: []
@@ -430,6 +460,11 @@ GameObject:
 --- !u!4 &5145322790111298204 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7673487251499544664, guid: c98043d57e0190845b790d7b92990bee, type: 3}
+  m_PrefabInstance: {fileID: 3250024631390712516}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5145322790111298216 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7673487251499544684, guid: c98043d57e0190845b790d7b92990bee, type: 3}
   m_PrefabInstance: {fileID: 3250024631390712516}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5140639367743356806

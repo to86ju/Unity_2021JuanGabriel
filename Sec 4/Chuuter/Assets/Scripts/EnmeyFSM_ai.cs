@@ -68,7 +68,7 @@ public class EnmeyFSM_ai : MonoBehaviour
     {
         print("Ir a base");
 
-        animator.SetBool("Shot Bullet Bool", true);
+        animator.SetBool("Shot Bullet Bool", false);
 
         agent.isStopped = false;//seguir el enemigo
         agent.SetDestination(baseTransform.position);//dirigite a la base

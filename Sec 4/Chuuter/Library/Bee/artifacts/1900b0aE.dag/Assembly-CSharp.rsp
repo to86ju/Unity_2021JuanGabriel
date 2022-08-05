@@ -367,6 +367,7 @@
 "Assets/Scripts/WaveManager.cs"
 "Assets/Scripts/WaveSpawner.cs"
 "Assets/Scripts/WavesUI.cs"
+"Assets/Scripts/Weapon.cs"
 "Assets/Sprites/Sci-Fi UI/Demo_Assets/scripts/GUI_Demo.cs"
 "Assets/TutorialInfo/Scripts/Readme.cs"
 -langversion:8.0

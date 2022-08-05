@@ -156,7 +156,7 @@ MonoBehaviour:
   actualTime: {fileID: 235230048}
   bestSocre: {fileID: 704134060}
   bestTime: {fileID: 1776548915}
-  playerHasWon: 0
+  playerHasWon: 1
 --- !u!4 &132979678
 Transform:
   m_ObjectHideFlags: 0

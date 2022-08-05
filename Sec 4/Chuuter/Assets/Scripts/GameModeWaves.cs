@@ -28,6 +28,7 @@ public class GameModeWaves : MonoBehaviour
     void CheckLoseCondition()
     {
         RegisterScore();
+        
         SceneManager.LoadScene("LoseScene", LoadSceneMode.Single);
     }
 
@@ -41,6 +42,7 @@ public class GameModeWaves : MonoBehaviour
         {
             //Debug.Log("gane");
             RegisterScore();
+            RegisterTime();
             SceneManager.LoadScene("WinScene", LoadSceneMode.Single);
         }
     }
@@ -67,7 +69,7 @@ public class GameModeWaves : MonoBehaviour
 
         if (acutualTime < LowTime)
         {
-            PlayerPrefs.SetFloat("Low Time", LowTime);
+            PlayerPrefs.SetFloat("Low Time", acutualTime);
         }
     }
 }

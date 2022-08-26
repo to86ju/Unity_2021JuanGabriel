@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Animator))]
 public class PlayerController : MonoBehaviour
@@ -66,7 +68,10 @@ public class PlayerController : MonoBehaviour
         transform.position = destination;
 
         isMoving = false;
+
+        CheckForPokemon();
     }
+
 
     /// <summary>
     /// El método comprueba que la zona a la que  queremos acceder, esté  disponible
@@ -81,5 +86,16 @@ public class PlayerController : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void CheckForPokemon()
+    {
+        if (Physics2D.OverlapCircle(transform.position, 0.25f, pokemonLayer) !=null)
+        {
+            if (Random.Range(0,100) < 10)
+            {
+                Debug.Log("Empezar batalla pokemon");
+            }
+        }
     }
 }

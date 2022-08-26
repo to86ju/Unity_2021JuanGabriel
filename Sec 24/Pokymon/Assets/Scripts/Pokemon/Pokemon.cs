@@ -9,11 +9,33 @@ public class Pokemon
 
     private int _level;
 
+    private List<Move> _move;
 
+    //Vida actual de pokemon
+    private int _hp;
+
+ 
     public Pokemon(PokemonBase pokemonbase, int pokemonLevel)
     {
         _base = pokemonbase;
         _level = pokemonLevel;
+
+        _hp = _base.MaxHP;
+
+        _move = new List<Move>();
+
+        foreach (var lmove in _base.LearnableMoves)
+        {
+            if (lmove.Level <= _level)
+            {
+                _move.Add(new Move(lmove.Move));
+            }
+
+            if (_move.Count >= 4)
+            {
+                break;
+            }
+        }
     }
 
     public int MaxHp => Mathf.FloorToInt((_base.MaxHP * _level) / 100.0f) + 10;
@@ -23,4 +45,6 @@ public class Pokemon
     public int SpDefense => Mathf.FloorToInt((_base.SpDefense * _level) / 100.0f) + 1;
     public int Speed => Mathf.FloorToInt((_base.Speed * _level) / 100.0f) + 1;
 
+    public List<Move> Move { get => _move; set => _move = value; }
+    public int Hp { get => _hp; set => _hp = value; }
 }

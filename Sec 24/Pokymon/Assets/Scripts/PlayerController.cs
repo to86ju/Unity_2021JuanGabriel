@@ -88,6 +88,7 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
+
     private void CheckForPokemon()
     {
         if (Physics2D.OverlapCircle(transform.position, 0.25f, pokemonLayer) !=null)

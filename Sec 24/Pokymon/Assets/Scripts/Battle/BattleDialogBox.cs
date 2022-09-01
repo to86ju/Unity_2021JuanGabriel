@@ -18,6 +18,8 @@ public class BattleDialogBox : MonoBehaviour
     [SerializeField] private Text ppText;
     [SerializeField] private Text typeText;
 
+    [SerializeField] private Color selectedColor = Color.blue;
+
     public IEnumerator SetDialog(string message)
     {
         dialogoText.text = "";
@@ -42,5 +44,29 @@ public class BattleDialogBox : MonoBehaviour
     {
         movementSelect.SetActive(activated);
         movementDesc.SetActive(activated);
+    }
+
+    public void SelectAction(int selectedAction)
+    {
+        for (int i = 0; i < actionTexts.Count; i++)
+        {
+            actionTexts[i].color = (i == selectedAction ? selectedColor : Color.black);
+            
+        }
+    }
+
+    public void SetPokemonMovements(List<Move> moves)
+    {
+        for (int i = 0; i < moventTexts.Count; i++)
+        {
+            if (i < moves.Count)
+            {
+                moventTexts[i].text = moves[i].Base.Name;
+            }
+            else
+            {
+                moventTexts[i].text = "---";
+            }
+        }
     }
 }

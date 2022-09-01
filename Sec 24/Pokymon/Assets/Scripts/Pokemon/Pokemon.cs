@@ -47,4 +47,6 @@ public class Pokemon
 
     public List<Move> Move { get => _move; set => _move = value; }
     public int Hp { get => _hp; set => _hp = value; }
+    public PokemonBase Base { get => _base;  }
+    public int Level { get => _level; }
 }

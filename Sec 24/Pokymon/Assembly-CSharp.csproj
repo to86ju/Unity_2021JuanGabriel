@@ -61,6 +61,10 @@
     <Compile Include="Assets\Scripts\Pokemon\Pokemon.cs" />
     <Compile Include="Assets\Scripts\Moves\MoveBase.cs" />
     <Compile Include="Assets\Scripts\Moves\Move.cs" />
+    <Compile Include="Assets\Scripts\Battle\HealthBar.cs" />
+    <Compile Include="Assets\Scripts\Battle\BattleHUD.cs" />
+    <Compile Include="Assets\Scripts\Battle\BattleUnit.cs" />
+    <Compile Include="Assets\Scripts\Battle\BattleManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

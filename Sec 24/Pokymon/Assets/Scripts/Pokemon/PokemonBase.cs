@@ -39,6 +39,9 @@ public class PokemonBase : ScriptableObject
     [SerializeField] private List<LearnableMove> learnebleMoves;
 
     public List<LearnableMove> LearnableMoves => learnebleMoves;
+
+    public Sprite FrontSprite { get => frontSprite; }
+    public Sprite BackSprite { get => backSprite;  }
 }
 
 public enum PokemonType

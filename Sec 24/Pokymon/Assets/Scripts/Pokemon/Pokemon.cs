@@ -20,7 +20,7 @@ public class Pokemon
         _base = pokemonbase;
         _level = pokemonLevel;
 
-        _hp = _base.MaxHP;
+        _hp = MaxHp;
 
         _move = new List<Move>();
 
@@ -38,7 +38,7 @@ public class Pokemon
         }
     }
 
-    public int MaxHp => Mathf.FloorToInt((_base.MaxHP * _level) / 100.0f) + 10;
+    public int MaxHp => Mathf.FloorToInt((_base.MaxHP * _level) / 20.0f) + 10;
     public int Attack => Mathf.FloorToInt((_base.Attack * _level) / 100.0f) + 1;
     public int Defense => Mathf.FloorToInt((_base.Defense * _level) / 100.0f) + 1;
     public int SpAttack => Mathf.FloorToInt((_base.SpAttack * _level) / 100.0f) + 1;

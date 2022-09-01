@@ -8,6 +8,7 @@ public class BattleHUD : MonoBehaviour
     public Text pokemonName;
     public Text pokemonLevel;
     public HealthBar healthbar;
+    public Text pokemonHealth;
 
 
 
@@ -16,5 +17,6 @@ public class BattleHUD : MonoBehaviour
         pokemonName.text = pokemon.Base.name;
         pokemonLevel.text = $"Lv {pokemon.Level}";
         healthbar.SetHP(pokemon.Hp / pokemon.MaxHp);
+        pokemonHealth.text = $"{pokemon.Hp}/ {pokemon.MaxHp}";
     }
 }

@@ -12,6 +12,12 @@ public class BattleDialogBox : MonoBehaviour
     [SerializeField] private GameObject movementSelect;
     [SerializeField] private GameObject movementDesc;
 
+    [SerializeField] private List<Text> actionTexts;
+    [SerializeField] private List<Text> moventTexts;
+
+    [SerializeField] private Text ppText;
+    [SerializeField] private Text typeText;
+
     public IEnumerator SetDialog(string message)
     {
         dialogoText.text = "";
@@ -20,5 +26,21 @@ public class BattleDialogBox : MonoBehaviour
             dialogoText.text += character;
             yield return new WaitForSeconds(1/charactersPerSecond);
         }
+    }
+
+    public void ToggleDialogText(bool activated)
+    {
+        dialogoText.enabled = activated;
+    }
+
+    public void ToggleActions(bool activated)
+    {
+        actionSelect.SetActive(activated);
+    }
+
+    public void ToggleMovements(bool activated)
+    {
+        movementSelect.SetActive(activated);
+        movementDesc.SetActive(activated);
     }
 }

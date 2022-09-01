@@ -638,6 +638,16 @@ MonoBehaviour:
   actionSelect: {fileID: 1397606727}
   movementSelect: {fileID: 1609073584}
   movementDesc: {fileID: 380894819}
+  actionTexts:
+  - {fileID: 902056529}
+  - {fileID: 2046086563}
+  moventTexts:
+  - {fileID: 707991250}
+  - {fileID: 1857607604}
+  - {fileID: 1003608509}
+  - {fileID: 695389330}
+  ppText: {fileID: 2083709893}
+  typeText: {fileID: 384478308}
 --- !u!1 &354067731
 GameObject:
   m_ObjectHideFlags: 0
@@ -13097,6 +13107,7 @@ MonoBehaviour:
   enmeyUnit: {fileID: 1212475434}
   enemyHUD: {fileID: 1147751470}
   batteDialogBox: {fileID: 264047244}
+  state: 0
 --- !u!1 &1609073584
 GameObject:
   m_ObjectHideFlags: 0

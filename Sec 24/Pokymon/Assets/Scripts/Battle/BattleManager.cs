@@ -87,11 +87,13 @@ public class BattleManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         playerunit.PlayReciveAttackAnimation();
 
-        bool pokemonFainted = playerunit.Pokemon.ReceiveDamage(enmeyUnit.Pokemon, move);
+        var damageDesc = playerunit.Pokemon.ReceiveDamage(enmeyUnit.Pokemon, move);
 
         playerHUD.UpdatePokemonData(oldHPVal);
 
-        if (pokemonFainted)
+        yield return showDamageDescription(damageDesc);
+
+        if (damageDesc.Fainted)
         {
             yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.Name} ha sido debilitado.");
             playerunit.PlayFaintAnimation();
@@ -223,11 +225,13 @@ public class BattleManager : MonoBehaviour
 
         enmeyUnit.PlayReciveAttackAnimation();
 
-        bool pokemonFainted = enmeyUnit.Pokemon.ReceiveDamage(playerunit.Pokemon, move);
+        var damageDesc = enmeyUnit.Pokemon.ReceiveDamage(playerunit.Pokemon, move);
 
         enemyHUD.UpdatePokemonData(oldHPVal);
 
-        if (pokemonFainted)
+        yield return showDamageDescription(damageDesc);
+
+        if (damageDesc.Fainted)
         {
             yield return batteDialogBox.SetDialog($"{enmeyUnit.Pokemon.Base.Name} se ha debilitado");
             enmeyUnit.PlayFaintAnimation();
@@ -236,5 +240,22 @@ public class BattleManager : MonoBehaviour
         {
             StartCoroutine(EnemyAction());
         }
+    }
+
+    IEnumerator showDamageDescription(DameDescription desc)
+    {
+        if (desc.Critical > 1f)
+        {
+            yield return batteDialogBox.SetDialog("¡Un golpe critico!");
+        }
+        if (desc.Type > 1)
+        {
+            yield return batteDialogBox.SetDialog("¡Es super efectivo!");
+        }
+        else if (desc.Type < 1)
+        {
+            yield return batteDialogBox.SetDialog("No es muy efectivo...");
+        }
+        
     }
 }

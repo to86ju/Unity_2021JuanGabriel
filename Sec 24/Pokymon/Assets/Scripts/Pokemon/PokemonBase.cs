@@ -27,7 +27,7 @@ public class PokemonBase : ScriptableObject
     public string Name => name;
     public string Description => description;
     public PokemonType Type1 => type1;
-    public PokemonType Tipe2 => type2;
+    public PokemonType Type2 => type2;
     public int MaxHP => maxHP;
     public int Attack => attack;
     public int Defense => defense;
@@ -52,19 +52,58 @@ public enum PokemonType
     Water,
     Electric,
     Grass,
-    Fight,
     Ice,
+    Fight,
     Poison,
     Ground,
     Fly,
     Psychic,
-    Rock,
     Bug,
+    Rock,
     Ghost,
     Dragon,
     Dark,
-    Fairy,
-    Steel
+    Steel,
+    Fairy
+}
+
+public class TypeMatrix
+{
+    private static float[][] matrix =
+    {
+        //                  NOR  FIR  WAT  ELE  GRA  ICE  FIG  POI  GRO  FLY  PSY  BUG  ROC  GHO  DRA  DAR  STE  FAI
+        /*NOR*/ new float[]{1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,0.5f,0f  ,1f  ,1f  ,0.5f,1f  },
+        /*FIR*/ new float[]{1f  ,0.5f,0.5f,1f  ,2f  ,2f  ,1f  ,1f  ,1f  ,1f  ,1f  ,2f  ,0.5f,1f  ,0.5f,1f  ,2f  ,1f  },
+        /*WAT*/ new float[]{1f  ,2f  ,0.5f,1f  ,0.5f,1f  ,1f  ,1f  ,2f  ,1f  ,1f  ,1f  ,2f  ,1f  ,0.5f,1f  ,1f  ,1f  },
+        /*ELE*/ new float[]{1f  ,1f  ,2f  ,0.5f,0.5f,1f  ,1f  ,1f  ,0f  ,2f  ,1f  ,1f  ,1f  ,1f  ,0.5f,1f  ,1f  ,1f  },
+        /*GRA*/ new float[]{1f  ,0.5f,2f  ,1f  ,0.5f,1f  ,1f  ,0.5f,2f  ,0.5f,1f  ,0.5f,2f  ,1f  ,0.5f,1f  ,0.5f,1f  },
+        /*ICE*/ new float[]{1f  ,0.5f,0.5f,1f  ,2f  ,0.5f,1f  ,1f  ,2f  ,2f  ,1f  ,1f  ,1f  ,1f  ,2f  ,1f  ,0.5f,1f  },
+        /*FIG*/ new float[]{2f  ,1f  ,1f  ,1f  ,1f  ,2f  ,1f  ,0.5f,1f  ,0.5f,0.5f,0.5f,2f  ,0f  ,1f  ,2f  ,2f  ,0.5f},
+        /*POI*/ new float[]{1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  },
+        /*GRO*/ new float[]{1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  },
+        /*FLY*/ new float[]{1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  },
+        /*PSY*/ new float[]{1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  },
+        /*BUG*/ new float[]{1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  },
+        /*ROC*/ new float[]{1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  },
+        /*GHO*/ new float[]{1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  },
+        /*DRA*/ new float[]{1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  },
+        /*DAR*/ new float[]{1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  },
+        /*STE*/ new float[]{1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  },
+        /*FAI*/ new float[]{1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  ,1f  }
+    };
+
+    public static float GetMulttEffectiveness(PokemonType PokemonType, PokemonType PokemondefenderType)
+    {
+        if (PokemonType == PokemonType.None || PokemondefenderType == PokemonType.None)
+        {
+            return 1.0f;
+        }
+
+        int row = (int)PokemonType;
+        int col = (int)PokemondefenderType;
+
+        return matrix[row - 1][col - 1];
+    }
 }
 
 [Serializable]

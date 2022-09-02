@@ -35,13 +35,14 @@ public class BattleUnit : MonoBehaviour
         PlayStartAnimatiocion();
     }
 
+    //-------------- animaciones ------------------------------
     public void PlayStartAnimatiocion()
     {
        
         pokemonImage.transform.localPosition = 
             new Vector3(inicialPosition.x+(isPlayer?-1:-1)*400, inicialPosition.y);
 
-        pokemonImage.transform.DOLocalMoveX(inicialPosition.x, 1.0f);
+        pokemonImage.transform.DOLocalMoveX(inicialPosition.x, startTimeAnam);
       
     }
 
@@ -49,8 +50,8 @@ public class BattleUnit : MonoBehaviour
     {
         var seq = DOTween.Sequence();
 
-        seq.Append(pokemonImage.transform.DOLocalMoveX(inicialPosition.x + (isPlayer ? 1 : -1) + 60, 0.3f));
-        seq.Append(pokemonImage.transform.DOLocalMoveX(inicialPosition.x, 0.3f));
+        seq.Append(pokemonImage.transform.DOLocalMoveX(inicialPosition.x + (isPlayer ? 1 : -1) + 60, attackTimeAnim));
+        seq.Append(pokemonImage.transform.DOLocalMoveX(inicialPosition.x, attackTimeAnim));
     }
 
     public void PlayReciveAttackAnimation()

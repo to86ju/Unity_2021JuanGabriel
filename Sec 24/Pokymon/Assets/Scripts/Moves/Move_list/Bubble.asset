@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5a5c74efb2783849ba9357d6e4d9be2, type: 3}
   m_Name: Bubble
   m_EditorClassIdentifier: 
-  name: Bubuja
+  name: Burbuja
   description: A spray of countless bubbles is jetted at the foe. It may also lower
     the target's Speed stat.
   type: 3

@@ -648,6 +648,8 @@ MonoBehaviour:
   - {fileID: 695389330}
   ppText: {fileID: 2083709893}
   typeText: {fileID: 384478308}
+  timetoWaitAfterText: 1
+  selectedColor: {r: 0, g: 0, b: 1, a: 1}
 --- !u!1 &354067731
 GameObject:
   m_ObjectHideFlags: 0
@@ -13108,6 +13110,7 @@ MonoBehaviour:
   enemyHUD: {fileID: 1147751470}
   batteDialogBox: {fileID: 264047244}
   state: 0
+  timeBetweenClicks: 0.5
 --- !u!1 &1609073584
 GameObject:
   m_ObjectHideFlags: 0
@@ -17572,5 +17575,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _base: {fileID: 11400000, guid: 156d4f041bef9d34c9aad8b60f6eeacf, type: 2}
-  _level: 6
+  _level: 7
   isPlayer: 1

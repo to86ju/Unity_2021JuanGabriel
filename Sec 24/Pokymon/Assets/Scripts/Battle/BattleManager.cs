@@ -28,6 +28,8 @@ public class BattleManager : MonoBehaviour
     private float timeSinceLastClick;
     public float timeBetweenClicks = 1.0f;
 
+    private int curentSelectedMovement;
+
     private void Start()
     {
         StartCoroutine(SetupBattle());
@@ -46,8 +48,6 @@ public class BattleManager : MonoBehaviour
         enemyHUD.SetPokemonData(enmeyUnit.Pokemon);
 
         yield return batteDialogBox.SetDialog($"Un {enmeyUnit.Pokemon.Base.name} salvaje apareció.");
-
-        yield return new WaitForSeconds(1.0f);
 
         PlayerAction();
     }
@@ -69,11 +69,28 @@ public class BattleManager : MonoBehaviour
         batteDialogBox.ToggleDialogText(false);
         batteDialogBox.ToggleActions(false);
         batteDialogBox.ToggleMovements(true);
+        curentSelectedMovement = 0;
+        batteDialogBox.SelectMovement(curentSelectedMovement,playerunit.Pokemon.Move[curentSelectedMovement]);
     }
 
-    private void EnemyAction()
+    private IEnumerator EnemyAction()
     {
+        state = BattleState.EnemyMove;
 
+        Move move = enmeyUnit.Pokemon.RandomMove();
+
+        yield return batteDialogBox.SetDialog($"{enmeyUnit.Pokemon.Base.Name} ha usado {move.Base.Name}");
+
+        bool pokemonFainted = playerunit.Pokemon.ReceiveDamage(enmeyUnit.Pokemon, move);
+
+        if (pokemonFainted)
+        {
+            yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.Name} ha sido debilitado.");
+        }
+        else
+        {
+            PlayerAction();
+        }
     }
 
     private void Update()
@@ -83,6 +100,10 @@ public class BattleManager : MonoBehaviour
         if (state == BattleState.PlayerSelctAction)
         {
             HandlePlayerActionsSelection();
+        }
+        else if (state == BattleState.PlayerMove)
+        {
+            HandlePlayerMovementSelector();
         }
     }
 
@@ -108,7 +129,6 @@ public class BattleManager : MonoBehaviour
             timeSinceLastClick = 0;
             if (currentSelecteAction == 0)
             {
-                Debug.Log("luchar");
                 PlayerMovement();
             }
             else if (currentSelecteAction == 1)
@@ -117,5 +137,79 @@ public class BattleManager : MonoBehaviour
             }
         }
 
+
+    }
+    private void HandlePlayerMovementSelector()
+    {
+        if(timeSinceLastClick < timeBetweenClicks)
+        {
+            return;
+        }
+
+        if (Input.GetAxisRaw("Vertical")!=0)
+        {
+            timeSinceLastClick = 0;
+            var oldSelectedMovement = curentSelectedMovement;
+
+            curentSelectedMovement = (curentSelectedMovement + 2) % 4;
+
+            if (curentSelectedMovement >= playerunit.Pokemon.Move.Count)
+            {
+                curentSelectedMovement = oldSelectedMovement;
+            }
+
+            batteDialogBox.SelectMovement(curentSelectedMovement,playerunit.Pokemon.Move[curentSelectedMovement]);
+        }
+
+        else if (Input.GetAxisRaw("Horizontal")!= 0)
+        {
+            timeSinceLastClick = 0;
+
+            var oldSelectedMovement = curentSelectedMovement;
+
+            if (curentSelectedMovement <=1)
+            {
+                curentSelectedMovement = (curentSelectedMovement + 1) % 2;
+            }
+            else //curentSelectedMovement >= 0
+            {
+                curentSelectedMovement = (curentSelectedMovement - 1) % 2 + 2;
+            }
+
+            if (curentSelectedMovement >= playerunit.Pokemon.Move.Count)
+            {
+                curentSelectedMovement = oldSelectedMovement;
+            }
+
+            batteDialogBox.SelectMovement(curentSelectedMovement, playerunit.Pokemon.Move[curentSelectedMovement]);
+        }
+
+        //--------------- ejecutar movimiento ------
+        if (Input.GetAxisRaw("Submit") !=0)
+        {
+            timeSinceLastClick = 0;
+            batteDialogBox.ToggleMovements(false);
+            batteDialogBox.ToggleDialogText(true);
+
+            StartCoroutine(PerformPlayerMovement());
+        }
+        //---------------------------------------
+    }
+
+    private IEnumerator PerformPlayerMovement()
+    {
+        Move move = playerunit.Pokemon.Move[curentSelectedMovement];
+        yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.Name} ha usado {move.Base.Name}");
+
+        bool pokemonFainted = enmeyUnit.Pokemon.ReceiveDamage(playerunit.Pokemon, move);
+
+        if (pokemonFainted)
+        {
+            yield return batteDialogBox.SetDialog($"{enmeyUnit.Pokemon.Base.Name} se ha debilitado");
+        }
+        else
+        {
+            StartCoroutine(EnemyAction());
+        }
     }
 }

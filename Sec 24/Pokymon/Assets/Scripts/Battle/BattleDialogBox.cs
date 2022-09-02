@@ -18,6 +18,8 @@ public class BattleDialogBox : MonoBehaviour
     [SerializeField] private Text ppText;
     [SerializeField] private Text typeText;
 
+    public float timetoWaitAfterText = 1f;
+
     [SerializeField] private Color selectedColor = Color.blue;
 
     public IEnumerator SetDialog(string message)
@@ -28,6 +30,7 @@ public class BattleDialogBox : MonoBehaviour
             dialogoText.text += character;
             yield return new WaitForSeconds(1/charactersPerSecond);
         }
+        yield return new WaitForSeconds(timetoWaitAfterText);
     }
 
     public void ToggleDialogText(bool activated)
@@ -53,6 +56,18 @@ public class BattleDialogBox : MonoBehaviour
             actionTexts[i].color = (i == selectedAction ? selectedColor : Color.black);
             
         }
+    }
+
+    public void SelectMovement(int selectedMovement,Move move)
+    {
+        for (int i = 0; i < moventTexts.Count; i++)
+        {
+            moventTexts[i].color = (i == selectedMovement ? selectedColor : Color.black);
+
+        }
+
+        ppText.text = $"PP {move.Pp} / {move.Base.Pp}";
+        typeText.text = move.Base.Type.ToString();
     }
 
     public void SetPokemonMovements(List<Move> moves)

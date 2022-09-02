@@ -16,12 +16,24 @@ public class BattleHUD : MonoBehaviour
         _pokemon = pokemon;
         pokemonName.text = pokemon.Base.name;
         pokemonLevel.text = $"Lv {pokemon.Level}";
-        UpdatePokemonData();
+        UpdatePokemonData(pokemon.Hp);
     }
 
-    public void UpdatePokemonData()
+    public void UpdatePokemonData(int olHPval)
     {
         StartCoroutine( healthbar.SetSmoothHP((float)_pokemon.Hp / _pokemon.MaxHp));
+        StartCoroutine(DecraseHealthPoints(olHPval));
+        
+    }
+
+    private IEnumerator DecraseHealthPoints(int oldHPval)
+    {
+        while (oldHPval > _pokemon.Hp)
+        {
+            oldHPval--;
+            pokemonHealth.text = $"{oldHPval} / {_pokemon.MaxHp}";
+            yield return new WaitForSeconds(0.1f);
+        }
         pokemonHealth.text = $"{_pokemon.Hp} / {_pokemon.MaxHp}";
     }
 }

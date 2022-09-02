@@ -81,13 +81,20 @@ public class BattleManager : MonoBehaviour
 
         yield return batteDialogBox.SetDialog($"{enmeyUnit.Pokemon.Base.Name} ha usado {move.Base.Name}");
 
+        var oldHPVal = playerunit.Pokemon.Hp;
+
+        enmeyUnit.PlayAttackAnimation();
+        yield return new WaitForSeconds(1f);
+        playerunit.PlayReciveAttackAnimation();
+
         bool pokemonFainted = playerunit.Pokemon.ReceiveDamage(enmeyUnit.Pokemon, move);
 
-        playerHUD.UpdatePokemonData();
+        playerHUD.UpdatePokemonData(oldHPVal);
 
         if (pokemonFainted)
         {
             yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.Name} ha sido debilitado.");
+            playerunit.PlayFaintAnimation();
         }
         else
         {
@@ -208,13 +215,22 @@ public class BattleManager : MonoBehaviour
         Move move = playerunit.Pokemon.Move[curentSelectedMovement];
         yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.Name} ha usado {move.Base.Name}");
 
+        var oldHPVal = enmeyUnit.Pokemon.Hp;
+
+        playerunit.PlayAttackAnimation();
+
+        yield return new WaitForSeconds(1f);
+
+        enmeyUnit.PlayReciveAttackAnimation();
+
         bool pokemonFainted = enmeyUnit.Pokemon.ReceiveDamage(playerunit.Pokemon, move);
 
-        enemyHUD.UpdatePokemonData();
+        enemyHUD.UpdatePokemonData(oldHPVal);
 
         if (pokemonFainted)
         {
             yield return batteDialogBox.SetDialog($"{enmeyUnit.Pokemon.Base.Name} se ha debilitado");
+            enmeyUnit.PlayFaintAnimation();
         }
         else
         {

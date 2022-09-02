@@ -1,10 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class HealthBar : MonoBehaviour
 {
     public GameObject healthBar;
+
+    public Color BarColor
+    {
+        get
+        {
+            var localscale = healthBar.transform.localScale.x;
+            if (localscale < 0.15f)
+            {
+                return new Color(193f / 255, 45f / 255, 45f / 255);
+            }
+            else if (localscale < 0.5f)
+            {
+                return new Color(211f / 255, 211f / 255, 29f / 255);
+            }
+            else
+            {
+                return new Color(98f/255, 178f/255,61f/255);
+            }
+        }
+    }
 
     /// <summary>
     /// Actualiza la barra de vida a partir del valor pnormalizado de la misma
@@ -24,6 +46,7 @@ public class HealthBar : MonoBehaviour
         {
             currentScale -= updateQuantity * Time.deltaTime;
             healthBar.transform.localScale = new Vector3(currentScale, 1);
+            healthBar.GetComponent<Image>().color = BarColor;
             yield return null;
 
         }

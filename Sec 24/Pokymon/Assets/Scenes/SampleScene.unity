@@ -354,7 +354,7 @@ RectTransform:
   - {fileID: 2131673665}
   - {fileID: 935916306}
   m_Father: {fileID: 1394224489}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -650,6 +650,7 @@ MonoBehaviour:
   typeText: {fileID: 384478308}
   timetoWaitAfterText: 1
   selectedColor: {r: 0, g: 0, b: 1, a: 1}
+  isWriting: 0
 --- !u!1 &354067731
 GameObject:
   m_ObjectHideFlags: 0
@@ -1881,7 +1882,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1394224489}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1941,6 +1942,10 @@ MonoBehaviour:
   _base: {fileID: 11400000, guid: db46f746e25a7c940b3b26a5e6daf435, type: 2}
   _level: 6
   isPlayer: 0
+  startTimeAnam: 1
+  attackTimeAnim: 0.3
+  hitTimeAnim: 0.15
+  dieTimeAnim: 1
 --- !u!1 &1221297554
 GameObject:
   m_ObjectHideFlags: 0
@@ -12764,8 +12769,8 @@ RectTransform:
   m_Children:
   - {fileID: 1521447626}
   - {fileID: 2145831616}
-  - {fileID: 235474207}
   - {fileID: 1212475431}
+  - {fileID: 235474207}
   - {fileID: 1147751471}
   - {fileID: 264047241}
   m_Father: {fileID: 1590337886}
@@ -17577,3 +17582,7 @@ MonoBehaviour:
   _base: {fileID: 11400000, guid: 156d4f041bef9d34c9aad8b60f6eeacf, type: 2}
   _level: 7
   isPlayer: 1
+  startTimeAnam: 1
+  attackTimeAnim: 0.3
+  hitTimeAnim: 0.15
+  dieTimeAnim: 1

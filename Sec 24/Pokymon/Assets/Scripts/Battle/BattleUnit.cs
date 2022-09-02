@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 [RequireComponent(typeof(Image))]
 public class BattleUnit : MonoBehaviour
@@ -11,12 +12,61 @@ public class BattleUnit : MonoBehaviour
     public Pokemon Pokemon { get; set; }
     public bool isPlayer;
 
+    private Image pokemonImage;
+    private Vector3 inicialPosition;
+    private Color InitialColor;
+
+    [SerializeField] float startTimeAnam = 1.0f, attackTimeAnim= 0.3f,hitTimeAnim= 0.15f ,dieTimeAnim = 1f;
+
+    private void Awake()
+    {
+        pokemonImage = GetComponent<Image>();
+        inicialPosition = pokemonImage.transform.localPosition;
+        InitialColor = pokemonImage.color;
+    }
+
     public void SetupPokemon()
     {
         Pokemon = new Pokemon(_base, _level);
 
-        GetComponent<Image>().sprite =
+        pokemonImage.sprite =
             (isPlayer ? Pokemon.Base.BackSprite : Pokemon.Base.FrontSprite);
+
+        PlayStartAnimatiocion();
+    }
+
+    public void PlayStartAnimatiocion()
+    {
+       
+        pokemonImage.transform.localPosition = 
+            new Vector3(inicialPosition.x+(isPlayer?-1:-1)*400, inicialPosition.y);
+
+        pokemonImage.transform.DOLocalMoveX(inicialPosition.x, 1.0f);
+      
+    }
+
+    public void PlayAttackAnimation()
+    {
+        var seq = DOTween.Sequence();
+
+        seq.Append(pokemonImage.transform.DOLocalMoveX(inicialPosition.x + (isPlayer ? 1 : -1) + 60, 0.3f));
+        seq.Append(pokemonImage.transform.DOLocalMoveX(inicialPosition.x, 0.3f));
+    }
+
+    public void PlayReciveAttackAnimation()
+    {
+        var seq = DOTween.Sequence();
+
+        seq.Append(pokemonImage.DOColor(Color.grey, hitTimeAnim));
+        seq.Append(pokemonImage.DOColor(InitialColor, hitTimeAnim));
+    }
+
+    public void PlayFaintAnimation()
+    {
+        var seq = DOTween.Sequence();
+
+        seq.Append(pokemonImage.transform.DOLocalMoveY(inicialPosition.y - 200, dieTimeAnim));
+        seq.Join(pokemonImage.DOFade(0f, dieTimeAnim));
     }
 
 }

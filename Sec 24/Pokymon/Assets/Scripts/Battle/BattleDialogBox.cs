@@ -22,8 +22,11 @@ public class BattleDialogBox : MonoBehaviour
 
     [SerializeField] private Color selectedColor = Color.blue;
 
+    public bool isWriting= false;
+
     public IEnumerator SetDialog(string message)
     {
+        isWriting = true;
         dialogoText.text = "";
         foreach (var character in message)
         {
@@ -31,6 +34,7 @@ public class BattleDialogBox : MonoBehaviour
             yield return new WaitForSeconds(1/charactersPerSecond);
         }
         yield return new WaitForSeconds(timetoWaitAfterText);
+        isWriting = false;
     }
 
     public void ToggleDialogText(bool activated)

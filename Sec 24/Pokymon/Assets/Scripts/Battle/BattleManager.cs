@@ -83,6 +83,8 @@ public class BattleManager : MonoBehaviour
 
         bool pokemonFainted = playerunit.Pokemon.ReceiveDamage(enmeyUnit.Pokemon, move);
 
+        playerHUD.UpdatePokemonData();
+
         if (pokemonFainted)
         {
             yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.Name} ha sido debilitado.");
@@ -96,6 +98,11 @@ public class BattleManager : MonoBehaviour
     private void Update()
     {
         timeSinceLastClick += Time.deltaTime;
+
+        if (batteDialogBox.isWriting)
+        {
+            return;
+        }
 
         if (state == BattleState.PlayerSelctAction)
         {
@@ -202,6 +209,8 @@ public class BattleManager : MonoBehaviour
         yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.Name} ha usado {move.Base.Name}");
 
         bool pokemonFainted = enmeyUnit.Pokemon.ReceiveDamage(playerunit.Pokemon, move);
+
+        enemyHUD.UpdatePokemonData();
 
         if (pokemonFainted)
         {

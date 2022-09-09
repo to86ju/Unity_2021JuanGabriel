@@ -41,13 +41,17 @@ public class BattleManager : MonoBehaviour
     {
         state = BattleState.StarBattle;
 
-        playerunit.SetupPokemon();
+        //------------- player ---------------
+        playerunit.SetupPokemon(playerunit.Pokemon);
         playerHUD.SetPokemonData(playerunit.Pokemon);
 
         batteDialogBox.SetPokemonMovements(playerunit.Pokemon.Move);
+        //----------------------------
 
-        enmeyUnit.SetupPokemon();
+        //----------- enemy -----------------
+        enmeyUnit.SetupPokemon(enmeyUnit.Pokemon);
         enemyHUD.SetPokemonData(enmeyUnit.Pokemon);
+        //------------------------------------------
 
         yield return batteDialogBox.SetDialog($"Un {enmeyUnit.Pokemon.Base.name} salvaje apareció.");
 
@@ -80,6 +84,7 @@ public class BattleManager : MonoBehaviour
         state = BattleState.EnemyMove;
 
         Move move = enmeyUnit.Pokemon.RandomMove();
+        move.Pp--;
 
         yield return batteDialogBox.SetDialog($"{enmeyUnit.Pokemon.Base.Name} ha usado {move.Base.Name}");
 
@@ -220,6 +225,7 @@ public class BattleManager : MonoBehaviour
     private IEnumerator PerformPlayerMovement()
     {
         Move move = playerunit.Pokemon.Move[curentSelectedMovement];
+        move.Pp--;
         yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.Name} ha usado {move.Base.Name}");
 
         var oldHPVal = enmeyUnit.Pokemon.Hp;

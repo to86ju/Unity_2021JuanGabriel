@@ -58,7 +58,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Battle\HealthBar.cs" />
     <Compile Include="Assets\Scripts\Pokemon\PokemonBase.cs" />
-    <Compile Include="Assets\Scripts\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Pokemon\Pokemon.cs" />
     <Compile Include="Assets\Scripts\Moves\MoveBase.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleHUD.cs" />
@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\Moves\Move.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleManager.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleUnit.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

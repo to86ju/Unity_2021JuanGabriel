@@ -104,7 +104,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void Update()
+    public void HandleUpdate()
     {
         timeSinceLastClick += Time.deltaTime;
 

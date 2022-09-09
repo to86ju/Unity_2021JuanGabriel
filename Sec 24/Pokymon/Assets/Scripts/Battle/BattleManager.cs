@@ -30,7 +30,9 @@ public class BattleManager : MonoBehaviour
 
     private int curentSelectedMovement;
 
-    private void Start()
+    public event Action<bool> OnBattleFinish;
+
+    public void HandleStartBattle()
     {
         StartCoroutine(SetupBattle());
     }
@@ -97,6 +99,9 @@ public class BattleManager : MonoBehaviour
         {
             yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.Name} ha sido debilitado.");
             playerunit.PlayFaintAnimation();
+
+            yield return new WaitForSeconds(1.5f);
+            OnBattleFinish(false);
         }
         else
         {
@@ -235,6 +240,8 @@ public class BattleManager : MonoBehaviour
         {
             yield return batteDialogBox.SetDialog($"{enmeyUnit.Pokemon.Base.Name} se ha debilitado");
             enmeyUnit.PlayFaintAnimation();
+            yield return new WaitForSeconds(1.5f);
+            OnBattleFinish(true);
         }
         else
         {

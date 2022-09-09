@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
 
     public LayerMask solidObjectsLayer, pokemonLayer;
 
+    public event Action OnPokemonEncountered;
+
     private void Awake()
     {
         __animator = GetComponent<Animator>();
@@ -96,6 +98,8 @@ public class PlayerController : MonoBehaviour
             if (Random.Range(0,100) < 10)
             {
                 Debug.Log("Empezar batalla pokemon");
+                //Trasmite el evento
+                OnPokemonEncountered();
             }
         }
     }

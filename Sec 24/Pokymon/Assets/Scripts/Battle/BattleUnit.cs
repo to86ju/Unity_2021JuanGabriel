@@ -31,6 +31,7 @@ public class BattleUnit : MonoBehaviour
 
         pokemonImage.sprite =
             (isPlayer ? Pokemon.Base.BackSprite : Pokemon.Base.FrontSprite);
+        pokemonImage.color = InitialColor;
 
         PlayStartAnimatiocion();
     }

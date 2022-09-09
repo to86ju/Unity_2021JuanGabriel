@@ -1141,6 +1141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 831616245}
   battleManager: {fileID: 1590337887}
+  worldMainCamera: {fileID: 519420031}
 --- !u!4 &555856454
 Transform:
   m_ObjectHideFlags: 0

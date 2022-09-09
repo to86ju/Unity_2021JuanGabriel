@@ -16,6 +16,7 @@ public class BattleHUD : MonoBehaviour
         _pokemon = pokemon;
         pokemonName.text = pokemon.Base.name;
         pokemonLevel.text = $"Lv {pokemon.Level}";
+        healthbar.SetHP(1);
         UpdatePokemonData(pokemon.Hp);
     }
 

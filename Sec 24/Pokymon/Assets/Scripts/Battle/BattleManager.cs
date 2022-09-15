@@ -32,8 +32,14 @@ public class BattleManager : MonoBehaviour
 
     public event Action<bool> OnBattleFinish;
 
-    public void HandleStartBattle()
+    private PokemonParty playerParty;
+    private Pokemon wildPokemon;
+
+    public void HandleStartBattle(PokemonParty playerParty, Pokemon wildPokemon)
     {
+        this.playerParty = playerParty;
+        this.wildPokemon = wildPokemon;
+
         StartCoroutine(SetupBattle());
     }
 
@@ -42,14 +48,14 @@ public class BattleManager : MonoBehaviour
         state = BattleState.StarBattle;
 
         //------------- player ---------------
-        playerunit.SetupPokemon(playerunit.Pokemon);
+        playerunit.SetupPokemon(playerParty.GetFirstNonFaintedPokemon());
         playerHUD.SetPokemonData(playerunit.Pokemon);
 
         batteDialogBox.SetPokemonMovements(playerunit.Pokemon.Move);
         //----------------------------
 
         //----------- enemy -----------------
-        enmeyUnit.SetupPokemon(enmeyUnit.Pokemon);
+        enmeyUnit.SetupPokemon(wildPokemon);
         enemyHUD.SetPokemonData(enmeyUnit.Pokemon);
         //------------------------------------------
 

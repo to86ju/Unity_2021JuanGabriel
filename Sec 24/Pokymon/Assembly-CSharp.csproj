@@ -56,6 +56,7 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Pokemon\PokemonParty.cs" />
     <Compile Include="Assets\Scripts\Battle\HealthBar.cs" />
     <Compile Include="Assets\Scripts\Pokemon\PokemonBase.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
@@ -67,8 +68,9 @@
     <Compile Include="Assets\Scripts\Battle\BattleManager.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleUnit.cs" />
-    <Compile Include="Assets\Scripts\Pokemon\PokemonParty.cs" />
     <Compile Include="Assets\Scripts\Pokemon\PokemonMapArea.cs" />
+    <Compile Include="Assets\Scripts\Battle\PartyMemberHUD.cs" />
+    <Compile Include="Assets\Scripts\Battle\PartyHUD.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

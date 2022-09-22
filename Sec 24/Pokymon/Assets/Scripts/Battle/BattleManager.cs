@@ -112,7 +112,26 @@ public class BattleManager : MonoBehaviour
             playerunit.PlayFaintAnimation();
 
             yield return new WaitForSeconds(1.5f);
-            OnBattleFinish(false);
+
+            var nextPokemon = playerParty.GetFirstNonFaintedPokemon();
+
+            if (nextPokemon == null)
+            {
+                OnBattleFinish(false);
+
+            }
+            else
+            {
+                playerunit.SetupPokemon(nextPokemon);
+                playerHUD.SetPokemonData(nextPokemon);
+
+                batteDialogBox.SetPokemonMovements(nextPokemon.Move);
+
+                yield return batteDialogBox.SetDialog($"¡Alelante {nextPokemon.Base.Name}!");
+
+                PlayerAction();
+            }
+
         }
         else
         {
@@ -146,31 +165,79 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
+        //----------- <-> ----------------------------
         if (Input.GetAxisRaw("Vertical") != 0)
         {
             timeSinceLastClick = 0;
 
-            currentSelecteAction = (currentSelecteAction+1) % 2;
+            currentSelecteAction = (currentSelecteAction+2) % 4;
 
             batteDialogBox.SelectAction(currentSelecteAction);
 
+        //-----------------------------------------
         }
 
+        //-------------------- || ------------------
+        else if (Input.GetAxisRaw("Horizontal") != 0)
+        {
+            
+            timeSinceLastClick = 0;
+            currentSelecteAction = (currentSelecteAction + 1) % 2 + 2 * Mathf.FloorToInt(currentSelecteAction / 2);
+            batteDialogBox.SelectAction(currentSelecteAction);
+            Debug.Log(currentSelecteAction);
+        }
+        //-----------------------------------------
+
+        //--- aciones ------------
         if (Input.GetAxisRaw("Submit") !=0)
         {
             timeSinceLastClick = 0;
             if (currentSelecteAction == 0)
             {
-                PlayerMovement();
+                PlayerMovement();//luchar
             }
             else if (currentSelecteAction == 1)
             {
-                //Implementar la huida
+                //Pokemon
+                OpenPartySelectionScreen();
             }
+            else if (currentSelecteAction == 2)
+            {
+                //mochila
+                OpenInventoryScreen();
+            }
+            else if (currentSelecteAction == 3)
+            {
+                //huir
+                OnBattleFinish(false);
+            }
+            //------------------------
+
+           
         }
 
-
     }
+
+    private void OpenInventoryScreen()
+    {
+        print("Abrir inventario");
+
+        if (Input.GetAxisRaw("Cancel") !=0)
+        {
+            PlayerAction();
+        }
+    }
+
+    private void OpenPartySelectionScreen()
+    {
+        print("Abrir la pantalla para seleccionar pokemons");
+
+        if (Input.GetAxisRaw("Cancel") != 0)
+        {
+            PlayerAction();
+        }
+    }
+
     private void HandlePlayerMovementSelector()
     {
         if(timeSinceLastClick < timeBetweenClicks)
@@ -178,10 +245,13 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
+        //----------- <> ---------------------
         if (Input.GetAxisRaw("Vertical")!=0)
         {
             timeSinceLastClick = 0;
+            //var oldSelectedMovement = (curentSelectedMovement+1)%2 + 2* Mathf.FloorToInt(curentSelectedMovement/2);
             var oldSelectedMovement = curentSelectedMovement;
+
 
             curentSelectedMovement = (curentSelectedMovement + 2) % 4;
 
@@ -192,29 +262,25 @@ public class BattleManager : MonoBehaviour
 
             batteDialogBox.SelectMovement(curentSelectedMovement,playerunit.Pokemon.Move[curentSelectedMovement]);
         }
+        //---------------------------------
 
+        //-------------------- || -------------------
         else if (Input.GetAxisRaw("Horizontal")!= 0)
         {
             timeSinceLastClick = 0;
 
-            var oldSelectedMovement = curentSelectedMovement;
-
-            if (curentSelectedMovement <=1)
-            {
-                curentSelectedMovement = (curentSelectedMovement + 1) % 2;
-            }
-            else //curentSelectedMovement >= 0
-            {
-                curentSelectedMovement = (curentSelectedMovement - 1) % 2 + 2;
-            }
+            var oldSelectedMovement = (curentSelectedMovement+1)%2 + 2*Mathf.FloorToInt(curentSelectedMovement/2);
+            
 
             if (curentSelectedMovement >= playerunit.Pokemon.Move.Count)
             {
                 curentSelectedMovement = oldSelectedMovement;
             }
+            Debug.Log(curentSelectedMovement + " " + playerunit.Pokemon.Move.Count);
 
             batteDialogBox.SelectMovement(curentSelectedMovement, playerunit.Pokemon.Move[curentSelectedMovement]);
         }
+        //--------------------------------------------
 
         //--------------- ejecutar movimiento ------
         if (Input.GetAxisRaw("Submit") !=0)
@@ -224,6 +290,13 @@ public class BattleManager : MonoBehaviour
             batteDialogBox.ToggleDialogText(true);
 
             StartCoroutine(PerformPlayerMovement());
+        }
+        //---------------------------------------
+
+        //------- cancelar ----------------------
+        if (Input.GetAxisRaw("Cancel") != 0)
+        {  
+            PlayerAction();
         }
         //---------------------------------------
     }

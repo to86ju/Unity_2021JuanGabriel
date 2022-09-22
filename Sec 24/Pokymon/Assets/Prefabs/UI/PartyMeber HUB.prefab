@@ -168,6 +168,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e326597ed40140243979a4ee79b40ae6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nameText: {fileID: 3750567987014363047}
+  lvlTExt: {fileID: 6125954168294890102}
+  typeText: {fileID: 710153580868231927}
+  hpText: {fileID: 5575035553097606904}
+  healthBar: {fileID: 5125144926247798874}
+  pokemonImage: {fileID: 7679893150116455035}
+  selectedColor: {r: 0.227451, g: 0.5803922, b: 0.5803922, a: 1}
 --- !u!1 &1421349174709153432
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,7 +631,7 @@ GameObject:
   - component: {fileID: 5128583437436129931}
   - component: {fileID: 7679893150116455035}
   m_Layer: 0
-  m_Name: Image
+  m_Name: Pokemon Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

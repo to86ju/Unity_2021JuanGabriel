@@ -184,18 +184,7 @@ public class BattleManager : MonoBehaviour
         if (Input.GetAxisRaw("Vertical") != 0)
         {
             timeSinceLastClick = 0;
-            //var oldSelectedMovement = (curentSelectedMovement+1)%2 + 2* Mathf.FloorToInt(curentSelectedMovement/2);
-            var oldSelectedPokemon = currentSelectedPokemon;
-
-
-            currentSelectedPokemon = (currentSelectedPokemon + 2) % 6;
-
-            if (currentSelectedPokemon >= playerParty.Pokemons.Count)
-            {
-                currentSelectedPokemon = oldSelectedPokemon;
-            }
-
-            partiHUD.UPdateSelectedPokemon(currentSelectedPokemon);
+            currentSelectedPokemon -= (int)Input.GetAxisRaw("Vertical")*2;
         }
         //---------------------------------
 
@@ -203,31 +192,60 @@ public class BattleManager : MonoBehaviour
         else if (Input.GetAxisRaw("Horizontal") != 0)
         {
             timeSinceLastClick = 0;
-
-            var oldSelectedPokemon = (currentSelectedPokemon + 1) % 2 + 2 * Mathf.FloorToInt(currentSelectedPokemon / 2);
-
-
-            if (currentSelectedPokemon >= playerParty.Pokemons.Count)
-            {
-                currentSelectedPokemon = oldSelectedPokemon;
-            }
-            partiHUD.UPdateSelectedPokemon(currentSelectedPokemon);
+            currentSelectedPokemon += (int)Input.GetAxisRaw("Horizontal");
+            
         }
         //--------------------------------------------
+
+        currentSelectedPokemon = Mathf.Clamp(currentSelectedPokemon, 0, playerParty.Pokemons.Count - 1);
+
+        partiHUD.UPdateSelectedPokemon(currentSelectedPokemon);
+        Debug.Log(currentSelectedPokemon);
 
         //--------------- ejecutar movimiento ------
         if (Input.GetAxisRaw("Submit") != 0)
         {
-            
+            timeBetweenClicks = 0;
+            var selectedPokemon = playerParty.Pokemons[currentSelectedPokemon];
+
+            if (selectedPokemon.Hp <= 0)
+            {
+                partiHUD.SendMessage("No puedes enviar un pokemon dibiliado");
+                return;
+            }
+            else if (selectedPokemon == playerunit.Pokemon)
+            {
+                partiHUD.SendMessage("No puedes seleccionar el pokemon en batalla");
+            }
+
+            partiHUD.gameObject.SetActive(false);
+            state = BattleState.Busy;
+            StartCoroutine(SwichPokemon(selectedPokemon));
         }
         //---------------------------------------
 
         //------- cancelar ----------------------
         if (Input.GetAxisRaw("Cancel") != 0)
         {
+            partiHUD.gameObject.SetActive(false);
             PlayerAction();
         }
         //---------------------------------------
+    }
+
+    private IEnumerator SwichPokemon(Pokemon newPokemon)
+    {
+        yield return batteDialogBox.SetDialog($"Vulve {playerunit.Pokemon.Base.name}");
+        playerunit.PlayFaintAnimation();
+        yield return new WaitForSeconds(1.5f);
+
+        playerunit.SetupPokemon(newPokemon);
+        playerHUD.SetPokemonData(newPokemon);
+
+        batteDialogBox.SetPokemonMovements(newPokemon.Move);
+        yield return batteDialogBox.SetDialog($"¡Ve {newPokemon.Base.name}!");
+
+        StartCoroutine(EnemyAction());
     }
 
     private void HandlePlayerActionsSelection()
@@ -303,8 +321,20 @@ public class BattleManager : MonoBehaviour
     private void OpenPartySelectionScreen()
     {
         //print("Abrir la pantalla para seleccionar pokemons");
+        state = BattleState.PartySelectScreen;
         partiHUD.SetPartyData(playerParty.Pokemons);
         partiHUD.gameObject.SetActive(true);
+        currentSelectedPokemon = 0;
+
+        for (int i = 0; i < playerParty.Pokemons.Count; i++)
+        {
+            if (playerunit.Pokemon == playerParty.Pokemons[i])
+            {
+                currentSelectedPokemon = i;
+            }
+        }
+
+        partiHUD.UPdateSelectedPokemon(currentSelectedPokemon);
 
         if (Input.GetAxisRaw("Cancel") != 0)
         {

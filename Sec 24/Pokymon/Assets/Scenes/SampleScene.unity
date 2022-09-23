@@ -316,8 +316,8 @@ MonoBehaviour:
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Lv
 --- !u!1 &235474206
@@ -1736,10 +1736,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pokemons:
+  - _base: {fileID: 11400000, guid: 156d4f041bef9d34c9aad8b60f6eeacf, type: 2}
+    _level: 1
   - _base: {fileID: 11400000, guid: db46f746e25a7c940b3b26a5e6daf435, type: 2}
     _level: 7
   - _base: {fileID: 11400000, guid: 156d4f041bef9d34c9aad8b60f6eeacf, type: 2}
     _level: 4
+  - _base: {fileID: 11400000, guid: af55a011af774d047a310d05bdbead06, type: 2}
+    _level: 5
+  - _base: {fileID: 11400000, guid: db46f746e25a7c940b3b26a5e6daf435, type: 2}
+    _level: 100
 --- !u!1 &902056527
 GameObject:
   m_ObjectHideFlags: 0
@@ -18471,8 +18477,8 @@ MonoBehaviour:
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Lv
 --- !u!222 &2131673667

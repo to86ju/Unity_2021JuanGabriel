@@ -97,7 +97,6 @@ public class PlayerController : MonoBehaviour
         {
             if (Random.Range(0,100) < 10)
             {
-                Debug.Log("Empezar batalla pokemon");
                 //Trasmite el evento
                 OnPokemonEncountered();
             }

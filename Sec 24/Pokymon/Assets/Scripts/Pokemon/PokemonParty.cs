@@ -22,6 +22,7 @@ public class PokemonParty : MonoBehaviour
         }
     }
 
+    //Metodo que te da el primer pokemon sano
     public Pokemon GetFirstNonFaintedPokemon()
     {
         //Debuelve el primer komemon con vida

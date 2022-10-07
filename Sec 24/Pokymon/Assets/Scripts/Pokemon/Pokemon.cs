@@ -20,7 +20,6 @@ public class Pokemon
  
     public void  InitPokemon()
     {
-        
 
         _hp = MaxHp;
 
@@ -93,6 +92,7 @@ public class Pokemon
         return damageDesc;
     }
 
+    //ataque random del enemigo
     public Move RandomMove()
     {
         int randId = Random.Range(0, Move.Count);

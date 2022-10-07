@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
 
     private void FinishPokemonBattle(bool playerHasWon)
     {
+        
         _gameState = GameState.Travel;
         battleManager.gameObject.SetActive(false);
         worldMainCamera.gameObject.SetActive(true);
@@ -55,10 +56,12 @@ public class GameManager : MonoBehaviour
     {
         if (_gameState == GameState.Travel)
         {
+           
             playerController.HandleUpdate();
         }
         else if (_gameState == GameState.Battle)
         {
+            
             battleManager.HandleUpdate();
         }
     }

@@ -28,4 +28,18 @@ public class PokemonParty : MonoBehaviour
         //Debuelve el primer komemon con vida
         return pokemons.Where(p => p.Hp > 0).FirstOrDefault();
     }
+
+    public int GetPositionFromPokemon(Pokemon pokemon)
+    {
+        // ------ obtener la posicion del pokemon actual -----
+        for (int i = 0; i < Pokemons.Count; i++)
+        {
+            if (pokemon == Pokemons[i])
+            {
+                return i;
+            }
+        }
+        //-------------------------------------------------------
+        return -1;
+    }
 }

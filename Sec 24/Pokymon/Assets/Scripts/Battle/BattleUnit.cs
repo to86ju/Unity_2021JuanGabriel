@@ -10,13 +10,19 @@ public class BattleUnit : MonoBehaviour
     public PokemonBase _base;
     public int _level;
     public Pokemon Pokemon { get; set; }
-    public bool isPlayer;
+
+    [SerializeField]private bool isPlayer;
 
     private Image pokemonImage;
     private Vector3 inicialPosition;
     private Color InitialColor;
 
     [SerializeField] float startTimeAnam = 1.0f, attackTimeAnim= 0.3f,hitTimeAnim= 0.15f ,dieTimeAnim = 1f;
+
+    public bool IsPlayer 
+    { 
+        get => isPlayer; 
+    }
 
     private void Awake()
     {
@@ -30,7 +36,7 @@ public class BattleUnit : MonoBehaviour
         Pokemon = pokemon;
 
         pokemonImage.sprite =
-            (isPlayer ? Pokemon.Base.BackSprite : Pokemon.Base.FrontSprite);
+            (IsPlayer ? Pokemon.Base.BackSprite : Pokemon.Base.FrontSprite);
         pokemonImage.color = InitialColor;
 
         PlayStartAnimatiocion();
@@ -41,7 +47,7 @@ public class BattleUnit : MonoBehaviour
     {
        
         pokemonImage.transform.localPosition = 
-            new Vector3(inicialPosition.x+(isPlayer?-1:-1)*400, inicialPosition.y);
+            new Vector3(inicialPosition.x+(IsPlayer?-1:-1)*400, inicialPosition.y);
 
         pokemonImage.transform.DOLocalMoveX(inicialPosition.x, startTimeAnam);
       
@@ -51,7 +57,7 @@ public class BattleUnit : MonoBehaviour
     {
         var seq = DOTween.Sequence();
 
-        seq.Append(pokemonImage.transform.DOLocalMoveX(inicialPosition.x + (isPlayer ? 1 : -1) + 60, attackTimeAnim));
+        seq.Append(pokemonImage.transform.DOLocalMoveX(inicialPosition.x + (IsPlayer ? 1 : -1) + 60, attackTimeAnim));
         seq.Append(pokemonImage.transform.DOLocalMoveX(inicialPosition.x, attackTimeAnim));
     }
 

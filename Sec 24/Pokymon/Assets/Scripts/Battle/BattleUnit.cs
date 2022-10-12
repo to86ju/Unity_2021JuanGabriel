@@ -9,9 +9,12 @@ public class BattleUnit : MonoBehaviour
 {
     public PokemonBase _base;
     public int _level;
+
     public Pokemon Pokemon { get; set; }
 
     [SerializeField]private bool isPlayer;
+
+    [SerializeField] private BattleHUD hud;
 
     private Image pokemonImage;
     private Vector3 inicialPosition;
@@ -19,10 +22,16 @@ public class BattleUnit : MonoBehaviour
 
     [SerializeField] float startTimeAnam = 1.0f, attackTimeAnim= 0.3f,hitTimeAnim= 0.15f ,dieTimeAnim = 1f;
 
+    //---- geter o seter--------
     public bool IsPlayer 
     { 
         get => isPlayer; 
     }
+    public BattleHUD Hud 
+    { 
+        get => hud; 
+    }
+    //---------------------------
 
     private void Awake()
     {
@@ -38,6 +47,8 @@ public class BattleUnit : MonoBehaviour
         pokemonImage.sprite =
             (IsPlayer ? Pokemon.Base.BackSprite : Pokemon.Base.FrontSprite);
         pokemonImage.color = InitialColor;
+
+        hud.SetPokemonData(pokemon);// configuar el hud
 
         PlayStartAnimatiocion();
     }
@@ -76,5 +87,5 @@ public class BattleUnit : MonoBehaviour
         seq.Append(pokemonImage.transform.DOLocalMoveY(inicialPosition.y - 200, dieTimeAnim));
         seq.Join(pokemonImage.DOFade(0f, dieTimeAnim));
     }
-
+    //-----------------------------------------------------------
 }

@@ -18,10 +18,9 @@ public enum BattleState
 public class BattleManager : MonoBehaviour
 {
     [SerializeField] private BattleUnit playerunit;
-    [SerializeField] private BattleHUD playerHUD;
 
     [SerializeField] private BattleUnit enmeyUnit;
-    [SerializeField] private BattleHUD enemyHUD;
+
 
     [SerializeField] private BattleDialogBox batteDialogBox;
 
@@ -58,14 +57,11 @@ public class BattleManager : MonoBehaviour
 
         //------------- player ---------------
         playerunit.SetupPokemon(playerParty.GetFirstNonFaintedPokemon());
-        playerHUD.SetPokemonData(playerunit.Pokemon);
-
         batteDialogBox.SetPokemonMovements(playerunit.Pokemon.Move);
         //----------------------------
 
         //----------- enemy -----------------
         enmeyUnit.SetupPokemon(wildPokemon);
-        enemyHUD.SetPokemonData(enmeyUnit.Pokemon);
         //------------------------------------------
 
         partiHUD.InitPartyHUD();//inicializar la parti de batalla
@@ -74,8 +70,11 @@ public class BattleManager : MonoBehaviour
 
         if (enmeyUnit.Pokemon.Speed > playerunit.Pokemon.Speed)
         {
-            StartCoroutine(batteDialogBox.SetDialog("El enemigo ataca primero"));
-            StartCoroutine(PerformEnemyMovement());
+            batteDialogBox.ToggleDialogText(true);
+            batteDialogBox.ToggleActions(false);
+            batteDialogBox.ToggleMovements(false);
+            yield return batteDialogBox.SetDialog("El enemigo ataca primero");
+            yield return PerformEnemyMovement();
         }
         else
         {
@@ -91,7 +90,7 @@ public class BattleManager : MonoBehaviour
     }
     //---------------------------------------------------
 
-    //------ Menus de UI - Actiones ------------
+    //------ Menus de UI - Todas la acciones ------------
     private void PlayerActionSelection()
     {
         state = BattleState.ActionSelection;
@@ -164,7 +163,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    //------ Menus de UI - controles de menus ------------
+    //------ Menus de UI  - controles de menus selecionar ataque ------------
     private void HandlePlayerActionsSelection()
     {
         if (timeSinceLastClick < timeBetweenClicks)
@@ -237,17 +236,17 @@ public class BattleManager : MonoBehaviour
         //----------- <> ---------------------
         if (Input.GetAxisRaw("Vertical") != 0)
         {
-            Debug.Log("Vertical axis HPMS " + Input.GetAxisRaw("Vertical"));
+            
             timeSinceLastClick = 0;
             //var oldSelectedMovement = (curentSelectedMovement+1)%2 + 2* Mathf.FloorToInt(curentSelectedMovement/2);
             var oldSelectedMovement = currentSelectedMovement;
 
             currentSelectedMovement = (currentSelectedMovement + 2) % 4;
-            Debug.Log("HPMS v " + currentSelectedMovement);
+            
 
             if (currentSelectedMovement >= playerunit.Pokemon.Move.Count)
             {
-                Debug.Log("el pokemon tiene pocos moviminetos aprendidos " + playerunit.Pokemon.Move.Count);
+                
                 currentSelectedMovement = oldSelectedMovement;
             }
 
@@ -259,16 +258,18 @@ public class BattleManager : MonoBehaviour
         //-------------------- || -------------------
         else if (Input.GetAxisRaw("Horizontal") != 0)
         {
-            Debug.Log("Horizontal axis HPMS " + Input.GetAxisRaw("Horizontal"));
+            
             timeSinceLastClick = 0;
 
-            var oldSelectedMovement = (currentSelectedMovement + 1) % 2 + 2 * Mathf.FloorToInt(currentSelectedMovement / 2);
+            var oldSelectedMovement = currentSelectedMovement;
 
-            Debug.Log("HPMS H " + " old " + oldSelectedMovement + " cu " + currentSelectedMovement);
+            currentSelectedMovement= (currentSelectedMovement + 1) % 2 + 2 * Mathf.FloorToInt(currentSelectedMovement / 2);
+
+            
 
             if (currentSelectedMovement >= playerunit.Pokemon.Move.Count)
             {
-                Debug.Log("el pokemon tiene pocos moviminetos aprendidos " + playerunit.Pokemon.Move.Count);
+                
                 currentSelectedMovement = oldSelectedMovement;
             }
 
@@ -363,11 +364,18 @@ public class BattleManager : MonoBehaviour
     }
     //------------------------------------------------
 
+    //---------------- Atake jugador y enemigo ------------
     private IEnumerator PerformPlayerMovement()
     {
         state = BattleState.PerformMovement;
 
         Move move = playerunit.Pokemon.Move[currentSelectedMovement];
+
+        if (move.Pp <=0)
+        {
+            PlayerMovementSelection();
+            yield break; //salir de la corrutina
+        }
 
         yield return RunMovement(playerunit, enmeyUnit, move);
 
@@ -394,6 +402,7 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator RunMovement(BattleUnit attackUnit, BattleUnit target, Move move)
     {
+
         move.Pp--;
         yield return batteDialogBox.SetDialog($"{attackUnit.Pokemon.Base.Name} ha usado {move.Base.Name}");
 
@@ -407,7 +416,7 @@ public class BattleManager : MonoBehaviour
 
         var damageDesc = target.Pokemon.ReceiveDamage(attackUnit.Pokemon, move);
 
-        //enemyHUD.UpdatePokemonData(oldHPVal); // Arreglar
+        yield return target.Hud.UpdatePokemonData(oldHPVal);
 
         yield return showDamageDescription(damageDesc);
 
@@ -420,6 +429,7 @@ public class BattleManager : MonoBehaviour
             CheckForBattleFinish(target);
         }
     }
+    //-----------------------------------------------------
 
     private void CheckForBattleFinish(BattleUnit faintedUnit)
     {
@@ -453,8 +463,7 @@ public class BattleManager : MonoBehaviour
         
 
         //-- refresaca el nuevo pokemon para la batalla
-        playerunit.SetupPokemon(newPokemon);
-        playerHUD.SetPokemonData(newPokemon);
+        playerunit.SetupPokemon(newPokemon);        
         batteDialogBox.SetPokemonMovements(newPokemon.Move);
 
 

@@ -72,6 +72,8 @@ public class BattleDialogBox : MonoBehaviour
 
         ppText.text = $"PP {move.Pp} / {move.Base.Pp}";
         typeText.text = move.Base.Type.ToString();
+
+        ppText.color = (move.Pp <= 0 ? Color.red : Color.black);
     }
 
     public void SetPokemonMovements(List<Move> moves)

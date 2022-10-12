@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
+using System.Linq;
 
 [Serializable]
 public class Pokemon
@@ -95,9 +96,19 @@ public class Pokemon
     //ataque random del enemigo
     public Move RandomMove()
     {
-        int randId = Random.Range(0, Move.Count);
+        var movesWithPP = Move.Where(m => m.Pp > 0).ToList();
 
-        return Move[randId];
+        if (movesWithPP.Count >0)
+        {
+            int randId = Random.Range(0, movesWithPP.Count);
+
+            return movesWithPP[randId];
+        }
+
+        //No hay pps en nigun ataque
+        //TODO: Implementar combate, que hace daño al enemigo y a ti mismo
+        return null;
+        
     }
 }
 

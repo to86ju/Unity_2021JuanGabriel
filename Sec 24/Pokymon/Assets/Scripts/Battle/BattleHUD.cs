@@ -17,14 +17,14 @@ public class BattleHUD : MonoBehaviour
         pokemonName.text = pokemon.Base.name;
         pokemonLevel.text = $"Lv {pokemon.Level}";
         healthbar.SetHP((float)_pokemon.Hp / _pokemon.MaxHp);
-        UpdatePokemonData(pokemon.Hp);
+        StartCoroutine( UpdatePokemonData(pokemon.Hp));
     }
 
-    public void UpdatePokemonData(int olHPval)
+    public IEnumerator UpdatePokemonData(int olHPval)
     {
         StartCoroutine( healthbar.SetSmoothHP((float)_pokemon.Hp / _pokemon.MaxHp));
-        StartCoroutine(DecraseHealthPoints(olHPval));
-        
+        StartCoroutine( DecraseHealthPoints(olHPval));
+        yield return null;
     }
 
     private IEnumerator DecraseHealthPoints(int oldHPval)

@@ -2557,6 +2557,7 @@ MonoBehaviour:
   _base: {fileID: 11400000, guid: db46f746e25a7c940b3b26a5e6daf435, type: 2}
   _level: 6
   isPlayer: 0
+  hud: {fileID: 1147751470}
   startTimeAnam: 1
   attackTimeAnim: 0.3
   hitTimeAnim: 0.15
@@ -13883,9 +13884,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerunit: {fileID: 2145831619}
-  playerHUD: {fileID: 235474210}
   enmeyUnit: {fileID: 1212475434}
-  enemyHUD: {fileID: 1147751470}
   batteDialogBox: {fileID: 264047244}
   partiHUD: {fileID: 1269001514}
   state: 0
@@ -18580,6 +18579,7 @@ MonoBehaviour:
   _base: {fileID: 11400000, guid: 156d4f041bef9d34c9aad8b60f6eeacf, type: 2}
   _level: 7
   isPlayer: 1
+  hud: {fileID: 235474210}
   startTimeAnam: 1
   attackTimeAnim: 0.3
   hitTimeAnim: 0.15

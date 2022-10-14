@@ -13613,7 +13613,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1074996457
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!1 &1397606727
@@ -13887,6 +13887,7 @@ MonoBehaviour:
   enmeyUnit: {fileID: 1212475434}
   batteDialogBox: {fileID: 264047244}
   partiHUD: {fileID: 1269001514}
+  pokeball: {fileID: 3408605247338656000, guid: 59b2af06673d3e14188f7575b3973c1c, type: 3}
   state: 0
   timeBetweenClicks: 0.5
 --- !u!1 &1609073584

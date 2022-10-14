@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public enum BattleState
 {
@@ -25,6 +26,8 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private BattleDialogBox batteDialogBox;
 
     [SerializeField] private PartyHUD partiHUD;
+
+    [SerializeField] GameObject pokeball;
 
     public BattleState state;
 
@@ -131,7 +134,7 @@ public class BattleManager : MonoBehaviour
     private void OpenInventoryScreen()
     {
         print("Abrir inventario");
-
+        StartCoroutine(ThrowPokeball());
     }
 
     //--------------------------------------------
@@ -488,4 +491,20 @@ public class BattleManager : MonoBehaviour
         }
         
     }
+
+    //------ pokeball-----------
+    private IEnumerator ThrowPokeball()
+    {
+        state = BattleState.Busy;
+
+        yield return batteDialogBox.SetDialog($"¡Has lanzado una {pokeball.name}!");
+
+        var pokeballInst = Instantiate(pokeball, playerunit.transform.position + new Vector3(-2,-2), Quaternion.identity);
+
+        var pokeballSpt = pokeballInst.GetComponent<SpriteRenderer>();
+
+        //Animacion---------
+        yield return pokeballSpt.transform.DOLocalJump(enmeyUnit.transform.position + new Vector3(0, 2), 2f, 1, 1f).WaitForCompletion();
+    }
+    //--------------------------
 }

@@ -53,3 +53,6 @@ TagManager:
   - name: Most Foreground
     uniqueID: 15136821
     locked: 0
+  - name: Battle
+    uniqueID: 3219970839
+    locked: 0

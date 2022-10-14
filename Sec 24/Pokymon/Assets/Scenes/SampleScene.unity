@@ -1737,7 +1737,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pokemons:
   - _base: {fileID: 11400000, guid: 156d4f041bef9d34c9aad8b60f6eeacf, type: 2}
-    _level: 1
+    _level: 7
   - _base: {fileID: 11400000, guid: db46f746e25a7c940b3b26a5e6daf435, type: 2}
     _level: 7
   - _base: {fileID: 11400000, guid: 156d4f041bef9d34c9aad8b60f6eeacf, type: 2}
@@ -2562,6 +2562,7 @@ MonoBehaviour:
   attackTimeAnim: 0.3
   hitTimeAnim: 0.15
   dieTimeAnim: 1
+  capturedTimeAnim: 0.6
 --- !u!1 &1217793061
 GameObject:
   m_ObjectHideFlags: 0
@@ -18585,6 +18586,7 @@ MonoBehaviour:
   attackTimeAnim: 0.3
   hitTimeAnim: 0.15
   dieTimeAnim: 1
+  capturedTimeAnim: 0.6
 --- !u!1001 &7584417514650280816
 PrefabInstance:
   m_ObjectHideFlags: 0

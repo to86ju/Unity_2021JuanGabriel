@@ -20,7 +20,7 @@ public class BattleUnit : MonoBehaviour
     private Vector3 inicialPosition;
     private Color InitialColor;
 
-    [SerializeField] float startTimeAnam = 1.0f, attackTimeAnim= 0.3f,hitTimeAnim= 0.15f ,dieTimeAnim = 1f;
+    [SerializeField] float startTimeAnam = 1.0f, attackTimeAnim= 0.3f,hitTimeAnim= 0.15f ,dieTimeAnim = 1f,capturedTimeAnim= 0.6f;
 
     //---- geter o seter--------
     public bool IsPlayer 
@@ -86,6 +86,18 @@ public class BattleUnit : MonoBehaviour
 
         seq.Append(pokemonImage.transform.DOLocalMoveY(inicialPosition.y - 200, dieTimeAnim));
         seq.Join(pokemonImage.DOFade(0f, dieTimeAnim));
+    }
+
+    public IEnumerator PlayCapturedAnimation()
+    {
+        var seq = DOTween.Sequence();
+
+        seq.Append(pokemonImage.DOFade(0, capturedTimeAnim));
+        seq.Join(transform.DOScale(new Vector3(0.25f,025f,1f),capturedTimeAnim));
+
+        seq.Join(transform.DOLocalMoveY(inicialPosition.y + 50f, capturedTimeAnim));
+
+        yield return seq.WaitForCompletion();
     }
     //-----------------------------------------------------------
 }

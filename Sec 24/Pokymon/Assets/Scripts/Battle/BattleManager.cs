@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Random = UnityEngine.Random;
 
 public enum BattleState
 {
@@ -492,7 +493,7 @@ public class BattleManager : MonoBehaviour
         
     }
 
-    //------ pokeball-----------
+    //------ pokeball--------------------------------
     private IEnumerator ThrowPokeball()
     {
         state = BattleState.Busy;
@@ -505,6 +506,59 @@ public class BattleManager : MonoBehaviour
 
         //Animacion---------
         yield return pokeballSpt.transform.DOLocalJump(enmeyUnit.transform.position + new Vector3(0, 2), 2f, 1, 1f).WaitForCompletion();
+
+        yield return enmeyUnit.PlayCapturedAnimation();
+
+        yield return pokeballSpt.transform.DOLocalMoveY(enmeyUnit.transform.position.y -2f, 0.3f).WaitForCompletion();
+
+        var numberOfShakes = TriToCatchPokemon(enmeyUnit.Pokemon);
+        for (int i = 0; i < Mathf.Min(numberOfShakes,3); i++)
+        {
+            yield return new WaitForSeconds(0.5f);
+            yield return pokeballSpt.transform.DOPunchRotation(new Vector3(0, 0, 15f), 0.6f).WaitForCompletion();
+        }
+
+        if (numberOfShakes == 4)
+        {
+            yield return batteDialogBox.SetDialog($"¡{enmeyUnit.Pokemon.Base.name} capturado!");
+            yield return pokeballSpt.DOFade(0, 1.5f).WaitForCompletion();
+
+            Destroy(pokeballInst);
+            BattleFinish(true);
+        }
+        else
+        {
+            //El pokemon se escapa....
+        }
     }
-    //--------------------------
+
+    private int TriToCatchPokemon(Pokemon pokemon)
+    {
+        float bonusPokeball = 1;
+        float bonusStart = 1;
+        float a = (3 * pokemon.MaxHp - 2 * pokemon.Hp) * pokemon.Base.CatchRate * bonusPokeball * bonusStart/(3*pokemon.MaxHp);
+
+        if (a >= 255)
+        {
+            return 4;
+        }
+
+        float b = 1048560 / Mathf.Sqrt(Mathf.Sqrt(16711680 / a));
+
+        int shakeCount = 0;
+
+        while(shakeCount < 4)
+        {
+            if (Random.Range(0, 65535) >=b)
+            {
+                break;
+            }
+            else
+            {
+                shakeCount++;
+            }
+        }
+        return shakeCount;
+    }
+    //--------------------------------------------------
 }

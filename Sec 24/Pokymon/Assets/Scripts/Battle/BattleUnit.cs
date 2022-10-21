@@ -50,6 +50,8 @@ public class BattleUnit : MonoBehaviour
 
         hud.SetPokemonData(pokemon);// configuar el hud
 
+        transform.localScale = new Vector3(1, 1, 1);//escala original
+
         PlayStartAnimatiocion();
     }
 
@@ -96,6 +98,18 @@ public class BattleUnit : MonoBehaviour
         seq.Join(transform.DOScale(new Vector3(0.25f,025f,1f),capturedTimeAnim));
 
         seq.Join(transform.DOLocalMoveY(inicialPosition.y + 50f, capturedTimeAnim));
+
+        yield return seq.WaitForCompletion();
+    }
+
+    public IEnumerator PlayBreakOutAnimation()
+    {
+        var seq = DOTween.Sequence();
+
+        seq.Append(pokemonImage.DOFade(1, capturedTimeAnim));
+        seq.Join(transform.DOScale(new Vector3(1f, 1f, 1f), capturedTimeAnim));
+
+        seq.Join(transform.DOLocalMoveY(inicialPosition.y, capturedTimeAnim));
 
         yield return seq.WaitForCompletion();
     }

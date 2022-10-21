@@ -14,7 +14,15 @@ public enum BattleState
     Busy,
     PartySelectScreen,
     ItemSelectScreen,
+    LoseTurn,
     FinishBattle
+}
+
+public enum BattleType
+{
+    wildPokemon,
+    trainer,
+    Leader
 }
 
 public class BattleManager : MonoBehaviour
@@ -31,6 +39,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] GameObject pokeball;
 
     public BattleState state;
+    public BattleType type;
 
     
     private float timeSinceLastClick;
@@ -45,12 +54,22 @@ public class BattleManager : MonoBehaviour
     private PokemonParty playerParty;
     private Pokemon wildPokemon;
 
+    private int escapeAttemps;//intentos de escape
+
     public void HandleStartBattle(PokemonParty playerParty, Pokemon wildPokemon)
     {
+        type = BattleType.wildPokemon;
+        escapeAttemps = 0;
         this.playerParty = playerParty;
         this.wildPokemon = wildPokemon;
 
         StartCoroutine(SetupBattle());
+    }
+
+    public void HandleStartTrainerBattle(PokemonParty playerParty, PokemonParty trainerParty, bool isleader)
+    {
+        type = (isleader ? BattleType.Leader : BattleType.trainer);
+        //el resto de batalla contra NPc
     }
 
     //---------- inicia y fin de la batalla ------------
@@ -135,6 +154,7 @@ public class BattleManager : MonoBehaviour
     private void OpenInventoryScreen()
     {
         print("Abrir inventario");
+        batteDialogBox.ToggleActions(false);
         StartCoroutine(ThrowPokeball());
     }
 
@@ -164,6 +184,10 @@ public class BattleManager : MonoBehaviour
         {
             Debug.Log("menu de party");
             handlePlayerPartySelection();
+        }
+        else if (state == BattleState.LoseTurn)
+        {
+            StartCoroutine( PerformEnemyMovement());
         }
     }
 
@@ -219,7 +243,7 @@ public class BattleManager : MonoBehaviour
             else if (currentSelecteAction == 3)
             {
                 //huir
-                OnBattleFinish(false);
+                StartCoroutine(TryToEscapeFromBattle());
             }
             //------------------------
 
@@ -233,9 +257,7 @@ public class BattleManager : MonoBehaviour
         if (timeSinceLastClick < timeBetweenClicks)
         {
             return;
-        }
-
-        Debug.Log("currentSelectedMovement " + currentSelectedMovement);
+        }        
 
         //----------- <> ---------------------
         if (Input.GetAxisRaw("Vertical") != 0)
@@ -498,6 +520,13 @@ public class BattleManager : MonoBehaviour
     {
         state = BattleState.Busy;
 
+        if (type != BattleType.wildPokemon)
+        {
+            yield return batteDialogBox.SetDialog("No puedes robar los pkemon de otros entrenadores");
+            state = BattleState.LoseTurn;
+            yield break;
+        }
+
         yield return batteDialogBox.SetDialog($"¡Has lanzado una {pokeball.name}!");
 
         var pokeballInst = Instantiate(pokeball, playerunit.transform.position + new Vector3(-2,-2), Quaternion.identity);
@@ -511,7 +540,7 @@ public class BattleManager : MonoBehaviour
 
         yield return pokeballSpt.transform.DOLocalMoveY(enmeyUnit.transform.position.y -2f, 0.3f).WaitForCompletion();
 
-        var numberOfShakes = TriToCatchPokemon(enmeyUnit.Pokemon);
+        var numberOfShakes = TryToCatchPokemon(enmeyUnit.Pokemon);
         for (int i = 0; i < Mathf.Min(numberOfShakes,3); i++)
         {
             yield return new WaitForSeconds(0.5f);
@@ -523,16 +552,40 @@ public class BattleManager : MonoBehaviour
             yield return batteDialogBox.SetDialog($"¡{enmeyUnit.Pokemon.Base.name} capturado!");
             yield return pokeballSpt.DOFade(0, 1.5f).WaitForCompletion();
 
+            if(playerParty.AddPokemonToParty(enmeyUnit.Pokemon))
+            {
+                yield return batteDialogBox.SetDialog($"{enmeyUnit.Pokemon.Base.name} se ha añadido a tu equipo");
+            }
+            else
+            {
+                yield return batteDialogBox.SetDialog("En algun momvento, lo mandaremos al Pc de Bill...");
+            }
+
             Destroy(pokeballInst);
             BattleFinish(true);
         }
         else
         {
             //El pokemon se escapa....
+            yield return new WaitForSeconds(0.5f);
+            pokeballSpt.DOFade(0, 0.2f);
+            yield return enmeyUnit.PlayBreakOutAnimation();
+
+            if (numberOfShakes <2)
+            {
+                yield return batteDialogBox.SetDialog($"{enmeyUnit.Pokemon.Base.name} ha escapado!");
+            }
+            else
+            {
+                yield return batteDialogBox.SetDialog($"¡Casa lo has atrapado!");
+            }
+            Destroy(pokeballInst);
+
+            state = BattleState.LoseTurn;
         }
     }
 
-    private int TriToCatchPokemon(Pokemon pokemon)
+    private int TryToCatchPokemon(Pokemon pokemon)
     {
         float bonusPokeball = 1;
         float bonusStart = 1;
@@ -545,7 +598,7 @@ public class BattleManager : MonoBehaviour
 
         float b = 1048560 / Mathf.Sqrt(Mathf.Sqrt(16711680 / a));
 
-        int shakeCount = 0;
+        int shakeCount = 4;//(0 por defecto, capturar rapido un pokemon)
 
         while(shakeCount < 4)
         {
@@ -559,6 +612,47 @@ public class BattleManager : MonoBehaviour
             }
         }
         return shakeCount;
+    }
+
+    private IEnumerator TryToEscapeFromBattle()
+    {
+        state = BattleState.Busy;
+
+        if (type != BattleType.wildPokemon)
+        {
+            yield return batteDialogBox.SetDialog("No puedes huir de combates contra entrenadors Pokemon");
+            state = BattleState.LoseTurn;
+            yield break;
+        }
+
+        //es contra un pokemon salvage
+        escapeAttemps++;
+
+        int playerSpeed = playerunit.Pokemon.Speed;
+        int enemySpeed = enmeyUnit.Pokemon.Speed;
+
+        if (playerSpeed >= enemySpeed)
+        {
+            yield return batteDialogBox.SetDialog("Has escapado con exito(1)");
+            yield return new WaitForSeconds(1);
+            OnBattleFinish(true);
+        }
+        else
+        {
+            int olddsScape = (Mathf.FloorToInt(playerSpeed * 128 / enemySpeed) + 30 * escapeAttemps) % 256;
+
+            if (Random.Range(0,256) < olddsScape)
+            {
+                yield return batteDialogBox.SetDialog("Has escapado con exito(2)");
+                yield return new WaitForSeconds(1);
+                OnBattleFinish(true);
+            }
+            else
+            {
+                yield return batteDialogBox.SetDialog("NO pudes escapar");
+                state = BattleState.LoseTurn;
+            }
+        }
     }
     //--------------------------------------------------
 }

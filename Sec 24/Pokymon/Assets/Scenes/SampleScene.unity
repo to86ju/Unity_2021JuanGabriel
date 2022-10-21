@@ -1704,6 +1704,7 @@ MonoBehaviour:
   pokemonLayer:
     serializedVersion: 2
     m_Bits: 896
+  verticaloffset: 0.7
 --- !u!95 &831616246
 Animator:
   serializedVersion: 3
@@ -13890,6 +13891,7 @@ MonoBehaviour:
   partiHUD: {fileID: 1269001514}
   pokeball: {fileID: 3408605247338656000, guid: 59b2af06673d3e14188f7575b3973c1c, type: 3}
   state: 0
+  type: 0
   timeBetweenClicks: 0.5
 --- !u!1 &1609073584
 GameObject:
@@ -17857,6 +17859,8 @@ MonoBehaviour:
   wildPokemons:
   - _base: {fileID: 11400000, guid: af55a011af774d047a310d05bdbead06, type: 2}
     _level: 2
+  - _base: {fileID: 11400000, guid: af55a011af774d047a310d05bdbead06, type: 2}
+    _level: 5
   - _base: {fileID: 11400000, guid: af55a011af774d047a310d05bdbead06, type: 2}
     _level: 5
   - _base: {fileID: 11400000, guid: 156d4f041bef9d34c9aad8b60f6eeacf, type: 2}

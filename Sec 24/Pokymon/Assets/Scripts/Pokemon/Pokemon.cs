@@ -18,7 +18,15 @@ public class Pokemon
     //Vida actual de pokemon
     private int _hp;
 
- 
+    public Pokemon(PokemonBase pBase, int plevel)
+    {
+        _base = pBase;
+        _level = plevel;
+
+        InitPokemon();
+    }
+
+
     public void  InitPokemon()
     {
 

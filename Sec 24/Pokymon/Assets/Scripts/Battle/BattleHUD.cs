@@ -10,6 +10,7 @@ public class BattleHUD : MonoBehaviour
     public HealthBar healthbar;
     public Text pokemonHealth;
     private Pokemon _pokemon;
+    public GameObject expBar;
 
     public void SetPokemonData(Pokemon pokemon)
     {
@@ -37,4 +38,14 @@ public class BattleHUD : MonoBehaviour
         }
         pokemonHealth.text = $"{_pokemon.Hp} / {_pokemon.MaxHp}";
     }
+
+    public void SetExp()
+    {
+        if (expBar == null)
+        {
+            return;
+        }
+    }
+
+    //si no, ahora seguimos
 }

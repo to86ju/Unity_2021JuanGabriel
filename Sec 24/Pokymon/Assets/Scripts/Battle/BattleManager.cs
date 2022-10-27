@@ -448,11 +448,7 @@ public class BattleManager : MonoBehaviour
 
         if (damageDesc.Fainted)
         {
-            yield return batteDialogBox.SetDialog($"{target.Pokemon.Base.Name} se ha debilitado");
-            target.PlayFaintAnimation();
-            yield return new WaitForSeconds(1.5f);
-            Debug.Log("fin de la batalla");
-            CheckForBattleFinish(target);
+            yield return HandlePokemonFainted(target);
         }
     }
     //-----------------------------------------------------
@@ -655,4 +651,33 @@ public class BattleManager : MonoBehaviour
         }
     }
     //--------------------------------------------------
+
+    private IEnumerator HandlePokemonFainted(BattleUnit faintedUnit)
+    {
+        yield return batteDialogBox.SetDialog($"{faintedUnit.Pokemon.Base.Name} se ha debilitado");
+        faintedUnit.PlayFaintAnimation();
+        yield return new WaitForSeconds(1.5f);
+        Debug.Log("fin de la batalla");
+
+        if (!faintedUnit.IsPlayer)
+        {
+            //Exp ++
+            int expBase = faintedUnit.Pokemon.Base.ExpBase;
+            int level = faintedUnit.Pokemon.Level;
+            float multplier = (type == BattleType.wildPokemon ? 1 : 1.5f);
+
+            int wonExp = Mathf.FloorToInt(expBase * level * multplier / 7);
+
+            playerunit.Pokemon.Experience += wonExp;
+            yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.name} ha ganado {wonExp} punto de experiencia");
+            yield return new WaitForSeconds(0.5f);
+
+            //chequear New level
+        }
+
+
+
+
+        CheckForBattleFinish(faintedUnit);
+    }
 }

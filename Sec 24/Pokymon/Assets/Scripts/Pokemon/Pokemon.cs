@@ -31,6 +31,7 @@ public class Pokemon
     {
 
         _hp = MaxHp;
+        _experience = Base.GetNecessaryExpForLevel(_level);
 
         _move = new List<Move>();
 
@@ -55,10 +56,14 @@ public class Pokemon
     public int SpAttack => Mathf.FloorToInt((_base.SpAttack * _level) / 100.0f) + 1;
     public int SpDefense => Mathf.FloorToInt((_base.SpDefense * _level) / 100.0f) + 1;
     public int Speed => Mathf.FloorToInt((_base.Speed * _level) / 100.0f) + 1;
+    private int _experience;
 
     //Aciones
     public List<Move> Move { get => _move; set => _move = value; }
     public int Hp { get => _hp; set => _hp = value; }
+    public int Experience { get => _experience; set => _experience = value; }
+
+    
     public PokemonBase Base { get => _base;  }
     public int Level { get => _level; }
 

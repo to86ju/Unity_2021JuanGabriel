@@ -3,20 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName ="Pokemon",menuName ="Pokemon/New Pokemon")]
+[CreateAssetMenu(fileName = "Pokemon", menuName = "Pokemon/New Pokemon")]
 
 public class PokemonBase : ScriptableObject
 {
     [SerializeField] private int ID;
     [SerializeField] private string name;
-   
+
     [TextArea] [SerializeField] private string description;
     [SerializeField] private Sprite frontSprite;
     [SerializeField] private Sprite backSprite;
 
     [SerializeField] private PokemonType type1, type2;
 
-    [SerializeField] private int catchRate= 255;
+    [SerializeField] private int catchRate = 255;
 
     //Stats
     [SerializeField] private int maxHP;
@@ -25,6 +25,8 @@ public class PokemonBase : ScriptableObject
     [SerializeField] private int spAttack;
     [SerializeField] private int spDefense;
     [SerializeField] private int speed;
+    [SerializeField] private int expBase;
+    [SerializeField] private GrowthRate grothRate;
 
     public string Name => name;
     public string Description => description;
@@ -36,6 +38,8 @@ public class PokemonBase : ScriptableObject
     public int SpAttack => spAttack;
     public int SpDefense => spDefense;
     public int Speed => speed;
+    public int ExpBase => expBase;
+    public GrowthRate GrowthRatee => grothRate;
 
 
     [SerializeField] private List<LearnableMove> learnebleMoves;
@@ -43,8 +47,69 @@ public class PokemonBase : ScriptableObject
     public List<LearnableMove> LearnableMoves => learnebleMoves;
 
     public Sprite FrontSprite { get => frontSprite; }
-    public Sprite BackSprite { get => backSprite;  }
+    public Sprite BackSprite { get => backSprite; }
     public int CatchRate { get => catchRate; set => catchRate = value; }
+
+
+    public int GetNecessaryExpForLevel(int level)
+    {
+        switch (grothRate)
+        {
+            case GrowthRate.Fast:
+                return Mathf.FloorToInt(4 * Mathf.Pow(level, 3) / 5);
+                break;
+
+            case GrowthRate.MediumFast:
+                return Mathf.FloorToInt(Mathf.Pow(level, 3));
+                break;
+
+            case GrowthRate.MediumSlow:
+                return Mathf.FloorToInt(6 * Mathf.Pow(level, 2) / 5 - 15 * Mathf.Pow(level, 2) + 100 * level - 140);
+                break;
+
+            case GrowthRate.Slow:
+                return Mathf.FloorToInt(5 * Mathf.Pow(level, 3) / 4);
+                break;
+
+            case GrowthRate.Erratic:
+                if (level < 50)
+                {
+                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (100 - level) / 50);
+                }
+                else if (level < 68)
+                {
+                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (150 - level) / 100);
+                }
+                else if (level < 98)
+                {
+                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * Mathf.FloorToInt((1911 - 10 * level) / 3) / 500);
+                }
+                else
+                {
+                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (160 - level) / 100);
+                }
+                break;
+
+            case GrowthRate.Fluctuating:
+                if (level < 15)
+                {
+                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (Mathf.FloorToInt((level + 1) / 3) + 24) / 50);
+                }
+                else if (level < 36)
+                {
+
+                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (level + 14) / 50);
+                }
+                else
+                {
+                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (Mathf.FloorToInt(level / 2) + 32) / 50);
+                }
+                break;
+
+        }
+
+        return -1;
+    }
 }
 
 public enum PokemonType
@@ -68,6 +133,16 @@ public enum PokemonType
     Dark,
     Steel,
     Fairy
+}
+
+public enum GrowthRate
+{
+    Erratic,
+    Fast,
+    MediumFast,
+    MediumSlow,
+    Slow,
+    Fluctuating
 }
 
 public class TypeMatrix
@@ -107,12 +182,14 @@ public class TypeMatrix
 
         return matrix[row - 1][col - 1];
     }
+
+    
 }
 
 [Serializable]
 public class LearnableMove
 {
-    [SerializeField] private MoveBase  move;
+    [SerializeField] private MoveBase move;
     [SerializeField] private int level;
 
     public MoveBase Move => move;

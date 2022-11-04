@@ -30,9 +30,9 @@ public class Pokemon
     public void  InitPokemon()
     {
 
-        _hp = MaxHp;
-        _experience = Base.GetNecessaryExpForLevel(_level);
-
+        _hp = MaxHp;        
+        _experience = Base.GetNecessaryExpForLevel(_level);//iniciar la experiencia 
+        
         _move = new List<Move>();
 
         foreach (var lmove in _base.LearnableMoves)
@@ -42,7 +42,7 @@ public class Pokemon
                 _move.Add(new Move(lmove.Move));
             }
 
-            if (_move.Count >= 4)
+            if (_move.Count >= PokemonBase.NUMBER_OF_LEARNABLE_MOVES)
             {
                 break;
             }
@@ -60,7 +60,7 @@ public class Pokemon
 
     //Aciones
     public List<Move> Move { get => _move; set => _move = value; }
-    public int Hp { get => _hp; set => _hp = value; }
+    public int Hp { get => _hp; set { _hp = value; _hp = Mathf.FloorToInt( Mathf.Clamp(_hp, 0, MaxHp)); } }
     public int Experience { get => _experience; set => _experience = value; }
 
     
@@ -122,6 +122,33 @@ public class Pokemon
         //TODO: Implementar combate, que hace daño al enemigo y a ti mismo
         return null;
         
+    }
+
+    public bool NeedsToLevelUp()
+    {
+        if (Experience > Base.GetNecessaryExpForLevel(_level+1))
+        {
+            int currentMaxHp = MaxHp;
+            _level++;
+            Hp += (MaxHp - currentMaxHp);
+            return true;
+        }
+        return false;
+    }
+
+    public LearnableMove GetLearnablemOveAtCurentLevel()
+    {
+        return Base.LearnableMoves.Where(lm => lm.Level == _level).FirstOrDefault();
+    }
+
+    public void learMove(LearnableMove learnableMove)
+    {
+        if (Move.Count >= PokemonBase.NUMBER_OF_LEARNABLE_MOVES)
+        {
+            return;
+        }
+
+        Move.Add(new Move(learnableMove.Move));
     }
 }
 

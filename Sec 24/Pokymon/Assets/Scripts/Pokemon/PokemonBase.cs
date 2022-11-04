@@ -46,6 +46,8 @@ public class PokemonBase : ScriptableObject
 
     public List<LearnableMove> LearnableMoves => learnebleMoves;
 
+    public static int NUMBER_OF_LEARNABLE_MOVES { get; } = 4;
+
     public Sprite FrontSprite { get => frontSprite; }
     public Sprite BackSprite { get => backSprite; }
     public int CatchRate { get => catchRate; set => catchRate = value; }
@@ -56,53 +58,53 @@ public class PokemonBase : ScriptableObject
         switch (grothRate)
         {
             case GrowthRate.Fast:
-                return Mathf.FloorToInt(4 * Mathf.Pow(level, 3) / 5);
+                return Mathf.FloorToInt(4 * Mathf.Pow(level, 3) / 5);               
                 break;
 
             case GrowthRate.MediumFast:
-                return Mathf.FloorToInt(Mathf.Pow(level, 3));
+                return Mathf.FloorToInt(Mathf.Pow(level, 3));                
                 break;
 
             case GrowthRate.MediumSlow:
-                return Mathf.FloorToInt(6 * Mathf.Pow(level, 2) / 5 - 15 * Mathf.Pow(level, 2) + 100 * level - 140);
+                return Mathf.FloorToInt(6 * Mathf.Pow(level, 3) / 5 - 15 * Mathf.Pow(level, 2) + 100 * level - 140);                 
                 break;
 
             case GrowthRate.Slow:
-                return Mathf.FloorToInt(5 * Mathf.Pow(level, 3) / 4);
+                return Mathf.FloorToInt(5 * Mathf.Pow(level, 3) / 4);                
                 break;
 
             case GrowthRate.Erratic:
                 if (level < 50)
                 {
-                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (100 - level) / 50);
+                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (100 - level) / 50);                    
                 }
                 else if (level < 68)
                 {
-                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (150 - level) / 100);
+                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (150 - level) / 100);                    
                 }
                 else if (level < 98)
                 {
-                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * Mathf.FloorToInt((1911 - 10 * level) / 3) / 500);
+                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * Mathf.FloorToInt((1911 - 10 * level) / 3) / 500);                    
                 }
                 else
                 {
-                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (160 - level) / 100);
+                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (160 - level) / 100);                    
                 }
                 break;
 
             case GrowthRate.Fluctuating:
                 if (level < 15)
                 {
-                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (Mathf.FloorToInt((level + 1) / 3) + 24) / 50);
+                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (Mathf.FloorToInt((level + 1) / 3) + 24) / 50);                    
                 }
                 else if (level < 36)
                 {
 
-                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (level + 14) / 50);
+                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (level + 14) / 50);                    
                 }
                 else
                 {
-                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (Mathf.FloorToInt(level / 2) + 32) / 50);
+                    return Mathf.FloorToInt(Mathf.Pow(level, 3) * (Mathf.FloorToInt(level / 2) + 32) / 50);                    
                 }
                 break;
 

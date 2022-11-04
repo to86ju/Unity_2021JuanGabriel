@@ -58,19 +58,20 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Pokemon\PokemonParty.cs" />
     <Compile Include="Assets\Scripts\Battle\HealthBar.cs" />
+    <Compile Include="Assets\Scripts\Battle\PartyHUD.cs" />
     <Compile Include="Assets\Scripts\Pokemon\PokemonBase.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Pokemon\Pokemon.cs" />
     <Compile Include="Assets\Scripts\Moves\MoveBase.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleHUD.cs" />
+    <Compile Include="Assets\Scripts\Battle\PartyMemberHUD.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleDialogBox.cs" />
     <Compile Include="Assets\Scripts\Moves\Move.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleManager.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleUnit.cs" />
     <Compile Include="Assets\Scripts\Pokemon\PokemonMapArea.cs" />
-    <Compile Include="Assets\Scripts\Battle\PartyMemberHUD.cs" />
-    <Compile Include="Assets\Scripts\Battle\PartyHUD.cs" />
+    <Compile Include="Assets\Scripts\Battle\SelectionMovementUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

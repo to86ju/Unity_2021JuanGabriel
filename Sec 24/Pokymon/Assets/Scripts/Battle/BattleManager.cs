@@ -14,6 +14,7 @@ public enum BattleState
     Busy,
     PartySelectScreen,
     ItemSelectScreen,
+    ForgetMovement,
     LoseTurn,
     FinishBattle
 }
@@ -35,6 +36,8 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private BattleDialogBox batteDialogBox;
 
     [SerializeField] private PartyHUD partiHUD;
+
+    [SerializeField] private SelectionMovementUI selectMoveUI;
 
     [SerializeField] GameObject pokeball;
 
@@ -172,12 +175,12 @@ public class BattleManager : MonoBehaviour
 
         if (state == BattleState.ActionSelection)
         {
-            Debug.Log("menu de selecion");
+            
             HandlePlayerActionsSelection();
         }
         else if (state == BattleState.MovementSelection)
         {
-            Debug.Log("menu de batalla");
+            
             HandlePlayerMovementSelector();
         }
         else if (state == BattleState.PartySelectScreen)
@@ -657,8 +660,7 @@ public class BattleManager : MonoBehaviour
         yield return batteDialogBox.SetDialog($"{faintedUnit.Pokemon.Base.Name} se ha debilitado");
         faintedUnit.PlayFaintAnimation();
         yield return new WaitForSeconds(1.5f);
-        Debug.Log("fin de la batalla");
-
+        
         if (!faintedUnit.IsPlayer)
         {
             //Exp ++
@@ -666,13 +668,41 @@ public class BattleManager : MonoBehaviour
             int level = faintedUnit.Pokemon.Level;
             float multplier = (type == BattleType.wildPokemon ? 1 : 1.5f);
 
-            int wonExp = Mathf.FloorToInt(expBase * level * multplier / 7);
+            int wonExp = Mathf.FloorToInt(expBase * level * multplier / 7);//expericia ganada del enemigo
 
-            playerunit.Pokemon.Experience += wonExp;
+            playerunit.Pokemon.Experience += wonExp;//suma la experiencia ganada
             yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.name} ha ganado {wonExp} punto de experiencia");
+
+            yield return playerunit.Hud.SetExpSmooth();//subier la experiencia ganada en la ui
+
             yield return new WaitForSeconds(0.5f);
 
             //chequear New level
+            while (playerunit.Pokemon.NeedsToLevelUp())
+            {
+                playerunit.Hud.SetLevelText();
+                yield return playerunit.Hud.UpdatePokemonData(playerunit.Pokemon.Hp);
+                yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.name} sube de nivel");
+
+                //Intentar aprende un nuevo movimiento
+                var newLearnalbeMove = playerunit.Pokemon.GetLearnablemOveAtCurentLevel();
+                if (newLearnalbeMove != null)
+                {
+                    if (playerunit.Pokemon.Move.Count < PokemonBase.NUMBER_OF_LEARNABLE_MOVES)
+                    {
+                        //podemos aprender el movimiento
+                        playerunit.Pokemon.learMove(newLearnalbeMove);
+                        yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.name} ha aprendido {newLearnalbeMove.Move.name}");
+                        batteDialogBox.SetPokemonMovements(playerunit.Pokemon.Move);
+                    }
+                    else
+                    {
+                       //olvidar uno de los movimientos
+                    }
+                }
+
+                yield return playerunit.Hud.SetExpSmooth(true);
+            }
         }
 
 

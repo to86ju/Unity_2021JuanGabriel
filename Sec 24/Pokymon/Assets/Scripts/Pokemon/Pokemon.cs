@@ -59,7 +59,7 @@ public class Pokemon
     private int _experience;
 
     //Aciones
-    public List<Move> Move { get => _move; set => _move = value; }
+    public List<Move> Moves { get => _move; set => _move = value; }
     public int Hp { get => _hp; set { _hp = value; _hp = Mathf.FloorToInt( Mathf.Clamp(_hp, 0, MaxHp)); } }
     public int Experience { get => _experience; set => _experience = value; }
 
@@ -109,7 +109,7 @@ public class Pokemon
     //ataque random del enemigo
     public Move RandomMove()
     {
-        var movesWithPP = Move.Where(m => m.Pp > 0).ToList();
+        var movesWithPP = Moves.Where(m => m.Pp > 0).ToList();
 
         if (movesWithPP.Count >0)
         {
@@ -143,12 +143,12 @@ public class Pokemon
 
     public void learMove(LearnableMove learnableMove)
     {
-        if (Move.Count >= PokemonBase.NUMBER_OF_LEARNABLE_MOVES)
+        if (Moves.Count >= PokemonBase.NUMBER_OF_LEARNABLE_MOVES)
         {
             return;
         }
 
-        Move.Add(new Move(learnableMove.Move));
+        Moves.Add(new Move(learnableMove.Move));
     }
 }
 

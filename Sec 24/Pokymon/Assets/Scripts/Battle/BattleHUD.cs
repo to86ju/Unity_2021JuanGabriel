@@ -16,7 +16,7 @@ public class BattleHUD : MonoBehaviour
     public void SetPokemonData(Pokemon pokemon)
     {
         _pokemon = pokemon;
-        pokemonName.text = pokemon.Base.name;
+        pokemonName.text = pokemon.Base.Name;
         //pokemonLevel.text = $"Lv {pokemon.Level}";
         SetLevelText();
         healthbar.SetHP((float)_pokemon.Hp / _pokemon.MaxHp);
@@ -82,8 +82,7 @@ public class BattleHUD : MonoBehaviour
         //experiencia normalizada
         float normalizedExp = (_pokemon.Experience - currentLevelExp) / (nextLevelExp - currentLevelExp);
 
-        Debug.Log("currentLevelExp "+ currentLevelExp + " next xp " + nextLevelExp + " norm xp "+ normalizedExp);
-
+        
         //Recorta el valor para que lo mas pequeño sea 0 y viceversa sea 1
         return Mathf.Clamp01(normalizedExp);
     }

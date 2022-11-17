@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Random = UnityEngine.Random;
+using System.Linq;
 
 public enum BattleState
 {
@@ -59,6 +60,8 @@ public class BattleManager : MonoBehaviour
 
     private int escapeAttemps;//intentos de escape
 
+    private MoveBase moveToLearn;
+
     public void HandleStartBattle(PokemonParty playerParty, Pokemon wildPokemon)
     {
         type = BattleType.wildPokemon;
@@ -83,7 +86,7 @@ public class BattleManager : MonoBehaviour
 
         //------------- player ---------------
         playerunit.SetupPokemon(playerParty.GetFirstNonFaintedPokemon());
-        batteDialogBox.SetPokemonMovements(playerunit.Pokemon.Move);
+        batteDialogBox.SetPokemonMovements(playerunit.Pokemon.Moves);
         //----------------------------
 
         //----------- enemy -----------------
@@ -92,7 +95,7 @@ public class BattleManager : MonoBehaviour
 
         partiHUD.InitPartyHUD();//inicializar la parti de batalla
 
-        yield return batteDialogBox.SetDialog($"Un {enmeyUnit.Pokemon.Base.name} salvaje apareció.");
+        yield return batteDialogBox.SetDialog($"Un {enmeyUnit.Pokemon.Base.Name} salvaje apareció.");
 
         if (enmeyUnit.Pokemon.Speed > playerunit.Pokemon.Speed)
         {
@@ -135,7 +138,7 @@ public class BattleManager : MonoBehaviour
         batteDialogBox.ToggleActions(false);
         batteDialogBox.ToggleMovements(true);
         currentSelectedMovement = 0;
-        batteDialogBox.SelectMovement(currentSelectedMovement,playerunit.Pokemon.Move[currentSelectedMovement]);
+        batteDialogBox.SelectMovement(currentSelectedMovement,playerunit.Pokemon.Moves[currentSelectedMovement]);
     }
 
     private void OpenPartySelectionScreen()
@@ -168,6 +171,12 @@ public class BattleManager : MonoBehaviour
     {
         timeSinceLastClick += Time.deltaTime;
 
+
+        if (timeSinceLastClick < timeBetweenClicks)
+        {
+            return;
+        }
+
         if (batteDialogBox.isWriting)
         {
             return;
@@ -185,22 +194,50 @@ public class BattleManager : MonoBehaviour
         }
         else if (state == BattleState.PartySelectScreen)
         {
-            Debug.Log("menu de party");
+
             handlePlayerPartySelection();
         }
         else if (state == BattleState.LoseTurn)
         {
             StartCoroutine( PerformEnemyMovement());
         }
+        else if (state == BattleState.ForgetMovement)
+        {
+            //-----Ejecutar el evento----------------
+            selectMoveUI.HandleForegetMoveSelection((moveIndex) => {
+                if (moveIndex < 0)
+                {
+                    timeSinceLastClick = 0;
+                    return;
+                }
+
+                selectMoveUI.gameObject.SetActive(false);
+
+                if (moveIndex == PokemonBase.NUMBER_OF_LEARNABLE_MOVES)
+                {
+                    //No apreder el nuevo
+                    StartCoroutine(batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.Name} no ha aprendido {moveToLearn.Name}"));
+                }
+                else
+                {
+                    //Olvido el selecionado y aprende el nuevo
+                    var seletectedMove = playerunit.Pokemon.Moves[moveIndex].Base;
+
+                    StartCoroutine(batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.Name} olvidó {seletectedMove.Name} y aprendió {moveToLearn.Name}"));
+                    playerunit.Pokemon.Moves[moveIndex] = new Move(moveToLearn);
+                }
+
+                moveToLearn = null;
+                state = BattleState.FinishBattle;
+            });
+            //---------------------------------------------
+        }
     }
 
     //------ Menus de UI  - controles de menus selecionar ataque ------------
     private void HandlePlayerActionsSelection()
     {
-        if (timeSinceLastClick < timeBetweenClicks)
-        {
-            return;
-        }
+      
 
         //----------- <-> ----------------------------
         if (Input.GetAxisRaw("Vertical") != 0)
@@ -257,10 +294,7 @@ public class BattleManager : MonoBehaviour
 
     private void HandlePlayerMovementSelector()
     {
-        if (timeSinceLastClick < timeBetweenClicks)
-        {
-            return;
-        }        
+          
 
         //----------- <> ---------------------
         if (Input.GetAxisRaw("Vertical") != 0)
@@ -273,14 +307,14 @@ public class BattleManager : MonoBehaviour
             currentSelectedMovement = (currentSelectedMovement + 2) % 4;
             
 
-            if (currentSelectedMovement >= playerunit.Pokemon.Move.Count)
+            if (currentSelectedMovement >= playerunit.Pokemon.Moves.Count)
             {
                 
                 currentSelectedMovement = oldSelectedMovement;
             }
 
             //PIntar de color la selecion y punto del ataue y tipo
-            batteDialogBox.SelectMovement(currentSelectedMovement, playerunit.Pokemon.Move[currentSelectedMovement]);
+            batteDialogBox.SelectMovement(currentSelectedMovement, playerunit.Pokemon.Moves[currentSelectedMovement]);
         }
         //---------------------------------
 
@@ -296,14 +330,14 @@ public class BattleManager : MonoBehaviour
 
             
 
-            if (currentSelectedMovement >= playerunit.Pokemon.Move.Count)
+            if (currentSelectedMovement >= playerunit.Pokemon.Moves.Count)
             {
                 
                 currentSelectedMovement = oldSelectedMovement;
             }
 
             //PIntar de color la selecion y punto del ataue y tipo
-            batteDialogBox.SelectMovement(currentSelectedMovement, playerunit.Pokemon.Move[currentSelectedMovement]);
+            batteDialogBox.SelectMovement(currentSelectedMovement, playerunit.Pokemon.Moves[currentSelectedMovement]);
         }
         //--------------------------------------------
 
@@ -328,16 +362,10 @@ public class BattleManager : MonoBehaviour
 
     private void handlePlayerPartySelection()
     {
-        if (timeSinceLastClick < timeBetweenClicks)
-        {
-            return;
-        }
 
         // 0  1
         // 2  3
         // 4  5
-
-
 
         //----------- <> ---------------------
         if (Input.GetAxisRaw("Vertical") != 0)
@@ -398,7 +426,7 @@ public class BattleManager : MonoBehaviour
     {
         state = BattleState.PerformMovement;
 
-        Move move = playerunit.Pokemon.Move[currentSelectedMovement];
+        Move move = playerunit.Pokemon.Moves[currentSelectedMovement];
 
         if (move.Pp <=0)
         {
@@ -481,7 +509,7 @@ public class BattleManager : MonoBehaviour
     {
         if (playerunit.Pokemon.Hp > 0)
         {
-            yield return batteDialogBox.SetDialog($"Vulve {playerunit.Pokemon.Base.name}");
+            yield return batteDialogBox.SetDialog($"Vulve {playerunit.Pokemon.Base.Name}");
             playerunit.PlayFaintAnimation();
             yield return new WaitForSeconds(1.5f);
         }
@@ -489,10 +517,10 @@ public class BattleManager : MonoBehaviour
 
         //-- refresaca el nuevo pokemon para la batalla
         playerunit.SetupPokemon(newPokemon);        
-        batteDialogBox.SetPokemonMovements(newPokemon.Move);
+        batteDialogBox.SetPokemonMovements(newPokemon.Moves);
 
 
-        yield return batteDialogBox.SetDialog($"¡Ve {newPokemon.Base.name}!");
+        yield return batteDialogBox.SetDialog($"¡Ve {newPokemon.Base.Name}!");
 
         StartCoroutine(PerformEnemyMovement());
     }
@@ -548,12 +576,12 @@ public class BattleManager : MonoBehaviour
 
         if (numberOfShakes == 4)
         {
-            yield return batteDialogBox.SetDialog($"¡{enmeyUnit.Pokemon.Base.name} capturado!");
+            yield return batteDialogBox.SetDialog($"¡{enmeyUnit.Pokemon.Base.Name} capturado!");
             yield return pokeballSpt.DOFade(0, 1.5f).WaitForCompletion();
 
             if(playerParty.AddPokemonToParty(enmeyUnit.Pokemon))
             {
-                yield return batteDialogBox.SetDialog($"{enmeyUnit.Pokemon.Base.name} se ha añadido a tu equipo");
+                yield return batteDialogBox.SetDialog($"{enmeyUnit.Pokemon.Base.Name} se ha añadido a tu equipo");
             }
             else
             {
@@ -572,7 +600,7 @@ public class BattleManager : MonoBehaviour
 
             if (numberOfShakes <2)
             {
-                yield return batteDialogBox.SetDialog($"{enmeyUnit.Pokemon.Base.name} ha escapado!");
+                yield return batteDialogBox.SetDialog($"{enmeyUnit.Pokemon.Base.Name} ha escapado!");
             }
             else
             {
@@ -671,7 +699,7 @@ public class BattleManager : MonoBehaviour
             int wonExp = Mathf.FloorToInt(expBase * level * multplier / 7);//expericia ganada del enemigo
 
             playerunit.Pokemon.Experience += wonExp;//suma la experiencia ganada
-            yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.name} ha ganado {wonExp} punto de experiencia");
+            yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.Name} ha ganado {wonExp} punto de experiencia");
 
             yield return playerunit.Hud.SetExpSmooth();//subier la experiencia ganada en la ui
 
@@ -682,22 +710,26 @@ public class BattleManager : MonoBehaviour
             {
                 playerunit.Hud.SetLevelText();
                 yield return playerunit.Hud.UpdatePokemonData(playerunit.Pokemon.Hp);
-                yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.name} sube de nivel");
+                yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.Name} sube de nivel");
 
                 //Intentar aprende un nuevo movimiento
                 var newLearnalbeMove = playerunit.Pokemon.GetLearnablemOveAtCurentLevel();
                 if (newLearnalbeMove != null)
                 {
-                    if (playerunit.Pokemon.Move.Count < PokemonBase.NUMBER_OF_LEARNABLE_MOVES)
+                    if (playerunit.Pokemon.Moves.Count < PokemonBase.NUMBER_OF_LEARNABLE_MOVES)
                     {
                         //podemos aprender el movimiento
                         playerunit.Pokemon.learMove(newLearnalbeMove);
-                        yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.name} ha aprendido {newLearnalbeMove.Move.name}");
-                        batteDialogBox.SetPokemonMovements(playerunit.Pokemon.Move);
+                        yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.Name} ha aprendido {newLearnalbeMove.Move.Name}");
+                        batteDialogBox.SetPokemonMovements(playerunit.Pokemon.Moves);
                     }
                     else
                     {
-                       //olvidar uno de los movimientos
+                        //olvidar uno de los movimientos
+                        yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.Name} intenta aprender {newLearnalbeMove.Move.Name}");
+                        yield return batteDialogBox.SetDialog($"Pero no puede aprender mas de {PokemonBase.NUMBER_OF_LEARNABLE_MOVES} movimientos");
+                        yield return ChooseMovementToForget(playerunit.Pokemon, newLearnalbeMove.Move);
+                        yield return new WaitUntil(() => state != BattleState.ForgetMovement);//delegado
                     }
                 }
 
@@ -705,9 +737,23 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-
-
-
         CheckForBattleFinish(faintedUnit);
     }
+
+    private IEnumerator ChooseMovementToForget(Pokemon learner, MoveBase newMove)
+    {
+        state = BattleState.Busy;
+        yield return batteDialogBox.SetDialog("Seleciona del movimiento que quieres olvidar");
+        selectMoveUI.gameObject.SetActive(true);
+        selectMoveUI.SetMovements(learner.Moves.Select(mv => mv.Base).ToList(),newMove);
+        moveToLearn = newMove;
+        state = BattleState.ForgetMovement;
+    }
+
+    /*
+    private IEnumerator ForgetOldMove()
+    {
+
+    }
+    */
 }

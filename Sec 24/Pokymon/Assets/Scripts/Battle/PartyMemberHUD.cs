@@ -17,7 +17,7 @@ public class PartyMemberHUD : MonoBehaviour
     {
         _pokemon = pokemon;
 
-        nameText.text = pokemon.Base.name;
+        nameText.text = pokemon.Base.Name;
         lvlTExt.text = $"Lv {pokemon.Level}";
         typeText.text = pokemon.Base.Type1.ToString().ToUpper();
         hpText.text = $"{pokemon.Hp} / {pokemon.MaxHp}";

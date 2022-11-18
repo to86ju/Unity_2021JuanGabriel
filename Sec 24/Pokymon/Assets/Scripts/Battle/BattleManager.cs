@@ -62,6 +62,8 @@ public class BattleManager : MonoBehaviour
 
     private MoveBase moveToLearn;
 
+    public AudioClip attackClip, damageClip, levelUpclip, EndBattleClip,FaintedClip, pokeballClip;
+
     public void HandleStartBattle(PokemonParty playerParty, Pokemon wildPokemon)
     {
         type = BattleType.wildPokemon;
@@ -113,6 +115,8 @@ public class BattleManager : MonoBehaviour
 
     public void BattleFinish(bool playerHasWon)
     {
+        SoundManager.sharedInstance.PlaySound(EndBattleClip);//sonido fin de batalla
+        Debug.Log("sonido fin de batalla");
         state = BattleState.FinishBattle;
 
         OnBattleFinish(playerHasWon);
@@ -467,9 +471,17 @@ public class BattleManager : MonoBehaviour
 
         attackUnit.PlayAttackAnimation();
 
+        SoundManager.sharedInstance.PlaySound(attackClip);//sonido de atake pokemon
+        Debug.Log("sonido de atake pokemon");
+
         yield return new WaitForSeconds(1f);
 
         target.PlayReciveAttackAnimation();
+
+        SoundManager.sharedInstance.PlaySound(damageClip);//sonido de daño de pokemon
+        Debug.Log("sonido de daño de pokemon");
+
+        yield return new WaitForSeconds(0.5f);
 
         var damageDesc = target.Pokemon.ReceiveDamage(attackUnit.Pokemon, move);
 
@@ -555,6 +567,9 @@ public class BattleManager : MonoBehaviour
         }
 
         yield return batteDialogBox.SetDialog($"¡Has lanzado una {pokeball.name}!");
+
+        SoundManager.sharedInstance.PlaySound(pokeballClip);//sonido lanzar pokebol
+        Debug.Log("sonido lanzar pokebol");
 
         var pokeballInst = Instantiate(pokeball, playerunit.transform.position + new Vector3(-2,-2), Quaternion.identity);
 
@@ -685,7 +700,9 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator HandlePokemonFainted(BattleUnit faintedUnit)
     {
+
         yield return batteDialogBox.SetDialog($"{faintedUnit.Pokemon.Base.Name} se ha debilitado");
+        SoundManager.sharedInstance.PlaySound(FaintedClip);
         faintedUnit.PlayFaintAnimation();
         yield return new WaitForSeconds(1.5f);
         
@@ -708,9 +725,15 @@ public class BattleManager : MonoBehaviour
             //chequear New level
             while (playerunit.Pokemon.NeedsToLevelUp())
             {
+
+                SoundManager.sharedInstance.PlaySound(levelUpclip);//sonido subir de nivel
+                Debug.Log("sonido subir de nivel");
+
                 playerunit.Hud.SetLevelText();
                 yield return playerunit.Hud.UpdatePokemonData(playerunit.Pokemon.Hp);
+                yield return new WaitForSeconds(1);
                 yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.Name} sube de nivel");
+                
 
                 //Intentar aprende un nuevo movimiento
                 var newLearnalbeMove = playerunit.Pokemon.GetLearnablemOveAtCurentLevel();

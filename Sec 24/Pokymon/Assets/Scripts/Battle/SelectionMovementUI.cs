@@ -38,10 +38,12 @@ public class SelectionMovementUI : MonoBehaviour
         {
             int direction = Mathf.FloorToInt(Input.GetAxisRaw("Vertical"));
             currentSelectedMovement -= direction;
-            currentSelectedMovement = Mathf.Clamp(currentSelectedMovement, 0, PokemonBase.NUMBER_OF_LEARNABLE_MOVES);            
-            UpdateColorForgetMoveSelection();
+            
             onSelected?.Invoke(-1);
         }
+
+        currentSelectedMovement = Mathf.Clamp(currentSelectedMovement, 0, PokemonBase.NUMBER_OF_LEARNABLE_MOVES);
+        UpdateColorForgetMoveSelection();
 
         // selecionar
         if (Input.GetAxisRaw("Submit") != 0)

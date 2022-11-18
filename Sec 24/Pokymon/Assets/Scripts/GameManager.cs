@@ -15,21 +15,26 @@ public class GameManager : MonoBehaviour
     [SerializeField] Camera worldMainCamera;
     private GameState _gameState;
 
+    public AudioClip worldclip, battleclip;
+
     private void Awake()
     {
         _gameState = GameState.Travel;
+        
     }
-
     private void Start()
     {
         //Subcriberse al evento
         playerController.OnPokemonEncountered += StartPokemonBattle;
         battleManager.OnBattleFinish += FinishPokemonBattle;
+
+        SoundManager.sharedInstance.PlayMusic(worldclip);// Musica de poblado
     }
 
     private void FinishPokemonBattle(bool playerHasWon)
     {
-        
+        SoundManager.sharedInstance.PlayMusic(worldclip);
+
         _gameState = GameState.Travel;
         battleManager.gameObject.SetActive(false);
         worldMainCamera.gameObject.SetActive(true);
@@ -42,6 +47,8 @@ public class GameManager : MonoBehaviour
 
     private void StartPokemonBattle()
     {
+        SoundManager.sharedInstance.PlayMusic(battleclip);// musica de batalla
+
         _gameState = GameState.Battle;
         battleManager.gameObject.SetActive(true);
         worldMainCamera.gameObject.SetActive(false);

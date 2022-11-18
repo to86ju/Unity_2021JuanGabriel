@@ -24,12 +24,18 @@ public class BattleDialogBox : MonoBehaviour
 
     public bool isWriting= false;
 
+    public AudioClip[] characterSounds;
+
     public IEnumerator SetDialog(string message)
     {
         isWriting = true;
         dialogoText.text = "";
         foreach (var character in message)
         {
+            if (character != ' ')
+            {
+                SoundManager.sharedInstance.RandomSoundEffect(characterSounds);
+            }
             dialogoText.text += character;
             yield return new WaitForSeconds(1/charactersPerSecond);
         }

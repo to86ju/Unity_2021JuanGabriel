@@ -68,10 +68,14 @@
     <Compile Include="Assets\Scripts\Battle\BattleDialogBox.cs" />
     <Compile Include="Assets\Scripts\Moves\Move.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleManager.cs" />
+    <Compile Include="Assets\Scripts\Battle\SelectionMovementUI.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleUnit.cs" />
     <Compile Include="Assets\Scripts\Pokemon\PokemonMapArea.cs" />
-    <Compile Include="Assets\Scripts\Battle\SelectionMovementUI.cs" />
+    <Compile Include="Assets\Scripts\SoundManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Audio\8Bit Music Album - 051321\Notes.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

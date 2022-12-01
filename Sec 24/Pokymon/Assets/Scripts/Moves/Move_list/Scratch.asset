@@ -14,7 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: "Ara\xF1azo"
   description: Hard, pointed, and sharp claws rake the foe to inflict damage.
-  type: 1
+  type: 13
   power: 40
   accuracy: 100
   pp: 35
+  moveType: 0
+  effects:
+    boostings: []
+  target: 1

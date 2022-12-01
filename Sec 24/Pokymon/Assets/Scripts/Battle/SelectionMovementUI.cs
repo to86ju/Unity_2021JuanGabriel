@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class SelectionMovementUI : MonoBehaviour
 {
     [SerializeField] Text[] movementTexts;
-    [SerializeField] Color selectedColor;
 
     private int currentSelectedMovement = 0;
 
@@ -56,7 +55,7 @@ public class SelectionMovementUI : MonoBehaviour
     {
         for (int i = 0; i <= PokemonBase.NUMBER_OF_LEARNABLE_MOVES; i++)
         {
-            movementTexts[i].color = (i == currentSelectedMovement ? selectedColor : Color.black);
+            movementTexts[i].color = (i == currentSelectedMovement ? ColorManager.sharedInstance.selectecColor : Color.black);
         }
     }
         

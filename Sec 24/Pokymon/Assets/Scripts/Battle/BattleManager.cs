@@ -467,8 +467,6 @@ public class BattleManager : MonoBehaviour
         move.Pp--;
         yield return batteDialogBox.SetDialog($"{attackUnit.Pokemon.Base.Name} ha usado {move.Base.Name}");
 
-        var oldHPVal = target.Pokemon.Hp;
-
         attackUnit.PlayAttackAnimation();
 
         SoundManager.sharedInstance.PlaySound(attackClip);//sonido de atake pokemon
@@ -483,13 +481,33 @@ public class BattleManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        var damageDesc = target.Pokemon.ReceiveDamage(attackUnit.Pokemon, move);
+        if (move.Base.MoveType == MoveType.Stats)
+        {
+            if (move.Base.Effects.Boostings !=null)
+            {
+                if (move.Base.Target == MoveTarget.Self)
+                {
+                    attackUnit.Pokemon.ApplyBoosts(move.Base.Effects.Boostings);
+                }
+                else
+                {
+                    target.Pokemon.ApplyBoosts(move.Base.Effects.Boostings);
+                }
+            }
+        }
+        else
+        {
+            var oldHPVal = target.Pokemon.Hp;
 
-        yield return target.Hud.UpdatePokemonData(oldHPVal);
+            var damageDesc = target.Pokemon.ReceiveDamage(attackUnit.Pokemon, move);
 
-        yield return showDamageDescription(damageDesc);
+            yield return target.Hud.UpdatePokemonData(oldHPVal);
 
-        if (damageDesc.Fainted)
+            yield return showDamageDescription(damageDesc);
+        }
+
+
+        if (target.Pokemon.Hp <=0)
         {
             yield return HandlePokemonFainted(target);
         }

@@ -27,12 +27,12 @@ public class Pokemon
     }
 
 
-    public void  InitPokemon()
+    public void InitPokemon()
     {
 
-        _hp = MaxHp;        
         _experience = Base.GetNecessaryExpForLevel(_level);//iniciar la experiencia 
-        
+
+        //----------- lista de move ------------------
         _move = new List<Move>();
 
         foreach (var lmove in _base.LearnableMoves)
@@ -47,19 +47,91 @@ public class Pokemon
                 break;
             }
         }
+        //---------------------------------------------
+
+        CalculateStats();
+        _hp = MaxHp;
+
+        StatsBoosted = new Dictionary<Stat, int>()
+        {
+            {Stat.Atack, 0 },
+            {Stat.Defense, 0 },
+            {Stat.SpAttack, 0 },
+            {Stat.SpDefense, 0 },
+            {Stat.Speed, 0 }
+        };
+    }
+
+
+    private void CalculateStats()
+    {
+        Stats = new Dictionary<Stat, int>();
+
+        Stats.Add(Stat.Atack, Mathf.FloorToInt((_base.Attack * _level) / 100.0f) + 2);
+        Stats.Add(Stat.Defense, Mathf.FloorToInt((_base.Defense * _level) / 100.0f) + 2);
+        Stats.Add(Stat.SpAttack, Mathf.FloorToInt((_base.SpAttack * _level) / 100.0f) + 2);
+        Stats.Add(Stat.SpDefense, Mathf.FloorToInt((_base.SpDefense * _level) / 100.0f) + 2);
+        Stats.Add(Stat.Speed, Mathf.FloorToInt((_base.Speed * _level) / 100.0f) + 2);
+
+        MaxHp = Mathf.FloorToInt((_base.MaxHP * _level)/20.0f)+10;
+    }
+
+    private int GetStat(Stat stat)
+    {
+        int statValue = Stats[stat];
+
+        int boost = StatsBoosted[stat];// esdes -6 hasta 6
+
+        float mulptiplier = 1.0f + Mathf.Abs(boost) / 2.0f;
+
+        // 1 -> 1.5 -> 2 -> 2.5 -> ... ->4
+        if (boost >= 0)
+        {
+            
+            statValue = Mathf.FloorToInt(statValue * mulptiplier);
+        }
+        else
+        {
+            
+            statValue = Mathf.FloorToInt(statValue / mulptiplier);
+        }
+
+        return statValue;
+    }
+
+    public void ApplyBoosts(List<StatBoosting> statBoostings)
+    {
+        foreach (var boost in statBoostings)
+        {
+            var stat = boost.stat;
+            var value = boost.boost;
+
+            StatsBoosted[stat] =  Mathf.Clamp( StatsBoosted[stat] + value,-6, 6);
+
+            Debug.Log($"{stat} se ha modificado a {StatsBoosted[stat]}");
+
+        }
     }
 
     //Propiedades
-    public int MaxHp => Mathf.FloorToInt((_base.MaxHP * _level) / 20.0f) + 10;
-    public int Attack => Mathf.FloorToInt((_base.Attack * _level) / 100.0f) + 1;
-    public int Defense => Mathf.FloorToInt((_base.Defense * _level) / 100.0f) + 1;
-    public int SpAttack => Mathf.FloorToInt((_base.SpAttack * _level) / 100.0f) + 1;
-    public int SpDefense => Mathf.FloorToInt((_base.SpDefense * _level) / 100.0f) + 1;
-    public int Speed => Mathf.FloorToInt((_base.Speed * _level) / 100.0f) + 1;
+    public int MaxHp {get; private set;}
+    public int Attack => GetStat(Stat.Atack);
+    public int Defense => GetStat(Stat.Defense);
+    public int SpAttack => GetStat(Stat.SpAttack);
+    public int SpDefense => GetStat(Stat.SpDefense);
+    public int Speed => GetStat(Stat.Speed);
     private int _experience;
 
     //Aciones
     public List<Move> Moves { get => _move; set => _move = value; }
+
+
+    //extadisticas
+    public Dictionary<Stat, int> Stats { get; private set; }
+
+    public Dictionary<Stat, int> StatsBoosted { get; private set; }
+
+
     public int Hp { get => _hp; set { _hp = value; _hp = Mathf.FloorToInt( Mathf.Clamp(_hp, 0, MaxHp)); } }
     public int Experience { get => _experience; set => _experience = value; }
 

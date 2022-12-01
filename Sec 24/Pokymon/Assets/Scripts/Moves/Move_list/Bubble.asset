@@ -15,7 +15,11 @@ MonoBehaviour:
   name: Burbuja
   description: A spray of countless bubbles is jetted at the foe. It may also lower
     the target's Speed stat.
-  type: 3
-  power: 30
+  type: 18
+  power: 40
   accuracy: 100
-  pp: 40
+  pp: 30
+  moveType: 1
+  effects:
+    boostings: []
+  target: 1

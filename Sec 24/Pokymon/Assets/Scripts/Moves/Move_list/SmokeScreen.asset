@@ -14,7 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Pantalla Humo
   description: 
-  type: 1
+  type: 13
   power: 0
   accuracy: 100
   pp: 20
+  moveType: 2
+  effects:
+    boostings:
+    - stat: 4
+      boost: -1
+  target: 1

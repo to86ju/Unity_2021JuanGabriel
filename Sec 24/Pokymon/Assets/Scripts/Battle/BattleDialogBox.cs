@@ -20,8 +20,6 @@ public class BattleDialogBox : MonoBehaviour
 
     public float timetoWaitAfterText = 1f;
 
-    [SerializeField] private Color selectedColor = Color.blue;
-
     public bool isWriting= false;
 
     public AudioClip[] characterSounds;
@@ -63,7 +61,7 @@ public class BattleDialogBox : MonoBehaviour
     {
         for (int i = 0; i < actionTexts.Count; i++)
         {
-            actionTexts[i].color = (i == selectedAction ? selectedColor : Color.black);
+            actionTexts[i].color = (i == selectedAction ? ColorManager.sharedInstance.selectecColor : Color.black);
             
         }
     }
@@ -72,14 +70,15 @@ public class BattleDialogBox : MonoBehaviour
     {
         for (int i = 0; i < moventTexts.Count; i++)
         {
-            moventTexts[i].color = (i == selectedMovement ? selectedColor : Color.black);
+            moventTexts[i].color = (i == selectedMovement ? ColorManager.sharedInstance.selectecColor : Color.black);
 
         }
 
         ppText.text = $"PP {move.Pp} / {move.Base.Pp}";
-        typeText.text = move.Base.Type.ToString();
+        typeText.text = move.Base.Type.ToString().ToUpper();
 
-        ppText.color = (move.Pp <= 0 ? Color.red : Color.black);
+        ppText.color = ColorManager.sharedInstance.PPColor((float)move.Pp/move.Base.Pp);
+        movementDesc.GetComponent<Image>().color = ColorManager.TypeColor.GetColorFromType(move.Base.Type);
     }
 
     public void SetPokemonMovements(List<Move> moves)

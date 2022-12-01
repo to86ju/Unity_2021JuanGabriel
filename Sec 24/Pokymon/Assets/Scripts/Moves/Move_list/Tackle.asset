@@ -15,7 +15,11 @@ MonoBehaviour:
   name: Placaje
   description: A physical attack in which the user charges and slams into the foe
     with its whole body.
-  type: 1
+  type: 13
   power: 40
   accuracy: 100
   pp: 35
+  moveType: 0
+  effects:
+    boostings: []
+  target: 1

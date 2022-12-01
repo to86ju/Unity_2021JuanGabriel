@@ -10,8 +10,7 @@ public class PartyMemberHUD : MonoBehaviour
     public HealthBar healthBar;
     public Image pokemonImage;
 
-    private Pokemon _pokemon;
-    [SerializeField] private Color selectedColor = Color.blue;
+    private Pokemon _pokemon;    
 
     public void SetPokemonData(Pokemon pokemon)
     {
@@ -23,13 +22,15 @@ public class PartyMemberHUD : MonoBehaviour
         hpText.text = $"{pokemon.Hp} / {pokemon.MaxHp}";
         healthBar.SetHP((float)pokemon.Hp / pokemon.MaxHp);
         pokemonImage.sprite = pokemon.Base.FrontSprite;
+
+        GetComponent<Image>().color = ColorManager.TypeColor.GetColorFromType(pokemon.Base.Type1);
     }
 
     public void SetSelectedPokemon(bool selected)
     {
         if (selected)
         {
-            nameText.color = selectedColor;
+            nameText.color = ColorManager.sharedInstance.selectecColor;
         }
         else
         {

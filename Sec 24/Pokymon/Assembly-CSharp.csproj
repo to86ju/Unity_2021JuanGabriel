@@ -63,6 +63,7 @@
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Pokemon\Pokemon.cs" />
     <Compile Include="Assets\Scripts\Managers\SoundManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\ColorManager.cs" />
     <Compile Include="Assets\Scripts\Moves\MoveBase.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleHUD.cs" />
     <Compile Include="Assets\Scripts\Battle\PartyMemberHUD.cs" />
@@ -73,7 +74,8 @@
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleUnit.cs" />
     <Compile Include="Assets\Scripts\Pokemon\PokemonMapArea.cs" />
-    <Compile Include="Assets\Scripts\Managers\ColorManager.cs" />
+    <Compile Include="Assets\Scripts\StatusConditions\StatusCondition.cs" />
+    <Compile Include="Assets\Scripts\StatusConditions\StatusConditionFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Audio\8Bit Music Album - 051321\Notes.txt" />

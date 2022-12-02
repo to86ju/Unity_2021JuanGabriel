@@ -150,6 +150,8 @@ public class Pokemon
 
     public Dictionary<Stat, int> StatsBoosted { get; private set; }
 
+    public StatusCondition statusCodition { get; set; }
+
     public Queue<string> StatusChangeMessages { get; private set; } = new Queue<string>(); //cola
 
 
@@ -197,6 +199,14 @@ public class Pokemon
         }
 
         return damageDesc;
+    }
+
+
+    //Metodo Estados alterados
+    public void SetConditionStatus(StatusConditionId id)
+    {
+        statusCodition = StatusConditionFactory.StatusConditions[id];
+        StatusChangeMessages.Enqueue($"{Base.name} {statusCodition.StartMessage}");
     }
 
     //ataque random del enemigo
@@ -256,3 +266,5 @@ public class DameDescription
     public float Type { get; set; }
     public bool Fainted { get; set; }
 }
+
+

@@ -509,17 +509,34 @@ public class BattleManager : MonoBehaviour
 
     IEnumerator RunMoveStats(Pokemon aattackUnit, Pokemon target, Move move)
     {
-        foreach (var effect in move.Base.Effects.Boostings)
+        // ---Stats Boosting----
+        foreach (var boost in move.Base.Effects.Boostings)
         {
-            if (effect.target == MoveTarget.Self)
+            if (boost.target == MoveTarget.Self)
             {
-                aattackUnit.ApplyBoost(effect);
+                aattackUnit.ApplyBoost(boost);
             }
             else
             {
-                target.ApplyBoost(effect);
+                target.ApplyBoost(boost);
             }
         }
+        //-----------------------
+
+        //---------- Estado alterado(Status Codition) ----------
+        if (move.Base.Effects.Status != StatusConditionId.none)
+        {
+            if(move.Base.Target == MoveTarget.Other)
+            {
+                target.SetConditionStatus(move.Base.Effects.Status);
+            }
+
+            else
+            {
+                aattackUnit.SetConditionStatus(move.Base.Effects.Status);
+            }
+        }
+        //-------------------------------------
 
         yield return ShowStatsMessages(aattackUnit);
         yield return ShowStatsMessages(target);

@@ -52,14 +52,8 @@ public class Pokemon
         CalculateStats();
         _hp = MaxHp;
 
-        StatsBoosted = new Dictionary<Stat, int>()
-        {
-            {Stat.Atack, 0 },
-            {Stat.Defense, 0 },
-            {Stat.SpAttack, 0 },
-            {Stat.SpDefense, 0 },
-            {Stat.Speed, 0 }
-        };
+        ResetBoostings();
+
     }
 
 
@@ -74,6 +68,20 @@ public class Pokemon
         Stats.Add(Stat.Speed, Mathf.FloorToInt((_base.Speed * _level) / 100.0f) + 2);
 
         MaxHp = Mathf.FloorToInt((_base.MaxHP * _level)/20.0f)+10;
+    }
+
+    private void ResetBoostings()
+    {
+        StatusChangeMessages = new Queue<string>();
+
+        StatsBoosted = new Dictionary<Stat, int>()
+        {
+            {Stat.Atack, 0 },
+            {Stat.Defense, 0 },
+            {Stat.SpAttack, 0 },
+            {Stat.SpDefense, 0 },
+            {Stat.Speed, 0 }
+        };
     }
 
     private int GetStat(Stat stat)
@@ -99,18 +107,29 @@ public class Pokemon
         return statValue;
     }
 
-    public void ApplyBoosts(List<StatBoosting> statBoostings)
+    public void ApplyBoost(StatBoosting boost)
     {
-        foreach (var boost in statBoostings)
+        
+        var stat = boost.stat;
+        var value = boost.boost;
+
+        StatsBoosted[stat] =  Mathf.Clamp( StatsBoosted[stat] + value,-6, 6);
+
+        if (value > 0)
         {
-            var stat = boost.stat;
-            var value = boost.boost;
-
-            StatsBoosted[stat] =  Mathf.Clamp( StatsBoosted[stat] + value,-6, 6);
-
-            Debug.Log($"{stat} se ha modificado a {StatsBoosted[stat]}");
-
+            StatusChangeMessages.Enqueue($"{Base.name} ha incrementado su {stat}");
         }
+
+        else if(value < 0)
+        {
+            StatusChangeMessages.Enqueue($"{Base.name} ha reducido su {stat}");        
+        }
+
+        else
+        {
+            StatusChangeMessages.Enqueue($"{Base.name} no nota ningún efecto");
+        }
+
     }
 
     //Propiedades
@@ -130,6 +149,8 @@ public class Pokemon
     public Dictionary<Stat, int> Stats { get; private set; }
 
     public Dictionary<Stat, int> StatsBoosted { get; private set; }
+
+    public Queue<string> StatusChangeMessages { get; private set; } = new Queue<string>(); //cola
 
 
     public int Hp { get => _hp; set { _hp = value; _hp = Mathf.FloorToInt( Mathf.Clamp(_hp, 0, MaxHp)); } }
@@ -221,6 +242,11 @@ public class Pokemon
         }
 
         Moves.Add(new Move(learnableMove.Move));
+    }
+
+    public void OnBattleFinish()
+    {
+        ResetBoostings();
     }
 }
 

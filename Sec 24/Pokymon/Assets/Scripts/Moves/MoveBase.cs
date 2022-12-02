@@ -64,6 +64,7 @@ public class StatBoosting
 {
     public Stat stat;
     public int boost;
+    public MoveTarget target;
 }
 
 public enum MoveTarget

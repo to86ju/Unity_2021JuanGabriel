@@ -23,4 +23,8 @@ MonoBehaviour:
     boostings:
     - stat: 4
       boost: -1
+      target: 1
+    - stat: 4
+      boost: -1
+      target: 0
   target: 1

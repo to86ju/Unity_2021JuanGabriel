@@ -480,8 +480,7 @@ public class BattleManager : MonoBehaviour
         yield return batteDialogBox.SetDialog($"{attackUnit.Pokemon.Base.Name} ha usado {move.Base.Name}");
 
 
-        yield return RunMoveAnims(attackUnit, attackClip);
-        yield return RunMoveAnims(target, damageClip);
+        yield return RunMoveAnims(attackUnit, target);       
 
         if (move.Base.MoveType == MoveType.Stats)
         {
@@ -494,7 +493,7 @@ public class BattleManager : MonoBehaviour
 
             var damageDesc = target.Pokemon.ReceiveDamage(attackUnit.Pokemon, move);
 
-            yield return target.Hud.UpdatePokemonData(oldHPVal);
+            yield return target.Hud.UpdatePokemonData();
 
             yield return showDamageDescription(damageDesc);
         }
@@ -503,6 +502,17 @@ public class BattleManager : MonoBehaviour
         if (target.Pokemon.Hp <=0)
         {
             yield return HandlePokemonFainted(target);
+        }
+
+        //Comprobar estados alterados como qumadura o envenenamiento a final de turno        
+        attackUnit.Pokemon.OnFinishTurn();
+        yield return ShowStatsMessages(attackUnit.Pokemon);
+        yield return attackUnit.Hud.UpdatePokemonData();
+
+
+        if (attackUnit.Pokemon.Hp <= 0)
+        {
+            yield return HandlePokemonFainted(attackUnit);
         }
     }
     //-----------------------------------------------------
@@ -542,13 +552,16 @@ public class BattleManager : MonoBehaviour
         yield return ShowStatsMessages(target);
     }
 
-    IEnumerator RunMoveAnims(BattleUnit actor,AudioClip sound )
+    IEnumerator RunMoveAnims(BattleUnit attacker,BattleUnit target )
     {
-        actor.PlayAttackAnimation();
+        attacker.PlayAttackAnimation();
 
-        SoundManager.sharedInstance.PlaySound(sound);//sonido de atake pokemon
+        SoundManager.sharedInstance.PlaySound(attackClip);//sonido de atake pokemon
 
         yield return new WaitForSeconds(1f);
+
+        target.PlayReciveAttackAnimation();
+        SoundManager.sharedInstance.PlaySound(damageClip);
        
     }
 
@@ -810,7 +823,8 @@ public class BattleManager : MonoBehaviour
                 Debug.Log("sonido subir de nivel");
 
                 playerunit.Hud.SetLevelText();
-                yield return playerunit.Hud.UpdatePokemonData(playerunit.Pokemon.Hp);
+                playerunit.Pokemon.HasHPChanged = true;
+                yield return playerunit.Hud.UpdatePokemonData();
                 yield return new WaitForSeconds(1);
                 yield return batteDialogBox.SetDialog($"{playerunit.Pokemon.Base.Name} sube de nivel");
                 

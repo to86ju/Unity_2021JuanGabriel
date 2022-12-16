@@ -8,20 +8,24 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour
 {
     public GameObject healthBar;
+    public Text currentHPText;
+    public Text maxHPText;
 
-   
+
 
     /// <summary>
     /// Actualiza la barra de vida a partir del valor pnormalizado de la misma
     /// </summary>
     /// <param name="normalizedValue">Valor de lavida normalizado entre 0 y 1</param>
-    public void SetHP(float normalizedValue)
+    public void SetHP(Pokemon pokemon)
     {
+        float normalizedValue = (float)pokemon.Hp / pokemon.MaxHp;
         healthBar.transform.localScale = new Vector3(normalizedValue, 1.0f);
         healthBar.GetComponent<Image>().color = ColorManager.sharedInstance.BarColor(normalizedValue);
+        maxHPText.text = $"/{pokemon.MaxHp}";
     }
 
-    public IEnumerator SetSmoothHP(float normalizeValue)
+    public IEnumerator SetSmoothHP(Pokemon pokemon)
     {
         /*
         float currentScale = healthBar.transform.localScale.x;
@@ -36,12 +40,15 @@ public class HealthBar : MonoBehaviour
 
         }
         healthBar.transform.localScale = new Vector3(normalizeValue, 1);
-        */
-
+        */        
+        float normalizedValue = (float)pokemon.Hp / pokemon.MaxHp;
         var seq = DOTween.Sequence();//crea una sequencia
-        seq.Append( healthBar.transform.DOScaleX(normalizeValue, 1f));//añado seq
-        seq.Join(healthBar.GetComponent<Image>().DOColor(ColorManager.sharedInstance.BarColor(normalizeValue),1f));//Junto seq
+        seq.Append( healthBar.transform.DOScaleX(normalizedValue, 1f));//añado seq
+        seq.Join(healthBar.GetComponent<Image>().DOColor(ColorManager.sharedInstance.BarColor(normalizedValue),1f));//Junto seq
+        seq.Join(currentHPText.DOCounter(pokemon.previousHPValue,pokemon.Hp,1f));
         yield return seq.WaitForCompletion();
 
     }
+
+  
 }

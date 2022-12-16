@@ -18,6 +18,9 @@ public class Pokemon
     //Vida actual de pokemon
     private int _hp;
 
+    public bool HasHPChanged { get; set; }
+    public int previousHPValue;
+
     public Pokemon(PokemonBase pBase, int plevel)
     {
         _base = pBase;
@@ -51,6 +54,8 @@ public class Pokemon
 
         CalculateStats();
         _hp = MaxHp;
+        previousHPValue = MaxHp;
+        HasHPChanged = true;
 
         ResetBoostings();
 
@@ -190,15 +195,26 @@ public class Pokemon
         float baseDamage = ((2 * attacker.Level / 5f + 2) * move.Base.Power * (attack/ (float)defense)) / 50f + 2;
         int totalDamage = Mathf.FloorToInt(baseDamage * modifierss);
 
-        Hp -= totalDamage;
+        UpdateHP(totalDamage);
 
-        if (Hp <= 0)
+        if (Hp <=0)
         {
-            Hp = 0;
             damageDesc.Fainted = true;
         }
 
         return damageDesc;
+    }
+
+    public void UpdateHP(int damage)
+    {
+        HasHPChanged = true;
+        previousHPValue = Hp;
+        Hp -= damage;
+
+        if (Hp <= 0)
+        {
+            Hp = 0;
+        }
     }
 
 
@@ -206,7 +222,7 @@ public class Pokemon
     public void SetConditionStatus(StatusConditionId id)
     {
         statusCodition = StatusConditionFactory.StatusConditions[id];
-        StatusChangeMessages.Enqueue($"{Base.name} {statusCodition.StartMessage}");
+        StatusChangeMessages.Enqueue($"{Base.Name} {statusCodition.StartMessage}");
     }
 
     //ataque random del enemigo
@@ -257,6 +273,11 @@ public class Pokemon
     public void OnBattleFinish()
     {
         ResetBoostings();
+    }
+
+    public void OnFinishTurn()
+    {
+        statusCodition?.OnFinishTur?.Invoke(this);
     }
 }
 

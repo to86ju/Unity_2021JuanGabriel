@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 12
   name: ButterFree
-  description: Pokemon Plilla
+  description: Pokemon Polilla
   frontSprite: {fileID: 21300000, guid: bd8ced012382b7340961ee82a72ca47e, type: 3}
   backSprite: {fileID: 21300000, guid: c8d2b39421c8c954e831fbc3ce9f1368, type: 3}
   type1: 1
@@ -33,5 +33,5 @@ MonoBehaviour:
     level: 1
   - move: {fileID: 11400000, guid: 8d2d6a563c3e8144dba50c6510e4828f, type: 2}
     level: 5
-  - move: {fileID: 11400000, guid: a0f64a46d8743724dac0ea747cce2634, type: 2}
-    level: 7
+  - move: {fileID: 11400000, guid: 3763513d21895f74ab66401bb4a3fbea, type: 2}
+    level: 13

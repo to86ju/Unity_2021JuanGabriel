@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class PartyMemberHUD : MonoBehaviour
 {
 
-    public Text nameText, lvlTExt, typeText, hpText;
+    public Text nameText, lvlTExt, typeText;
     public HealthBar healthBar;
     public Image pokemonImage;
 
@@ -20,8 +20,7 @@ public class PartyMemberHUD : MonoBehaviour
         lvlTExt.text = $"Lv {pokemon.Level}";
         typeText.text = pokemon.Base.Type1.ToString().ToUpper();
 
-        //Actualizar cunado corresponda
-        hpText.text = $"{pokemon.Hp} / {pokemon.MaxHp}";
+        
         healthBar.SetHP(pokemon);
         
         pokemonImage.sprite = pokemon.Base.FrontSprite;

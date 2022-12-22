@@ -2383,7 +2383,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pokemons:
-  - _base: {fileID: 11400000, guid: 805e96028556d4f4d9be35a6b7ed105d, type: 2}
+  - _base: {fileID: 11400000, guid: 253800f19ac07d142897736403900bd1, type: 2}
     _level: 13
     previousHPValue: 0
   - _base: {fileID: 11400000, guid: db46f746e25a7c940b3b26a5e6daf435, type: 2}

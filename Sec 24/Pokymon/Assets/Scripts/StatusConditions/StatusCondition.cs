@@ -9,5 +9,7 @@ public class StatusCondition
     public string Descrption { get; set; }
     public string StartMessage { get; set; }
 
+    public Func<Pokemon, bool> OnStartTurn { get; set; }
     public Action<Pokemon> OnFinishTur { get; set; }
+    
 }

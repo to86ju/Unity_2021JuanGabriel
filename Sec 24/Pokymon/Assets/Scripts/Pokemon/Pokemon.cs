@@ -225,6 +225,21 @@ public class Pokemon
         StatusChangeMessages.Enqueue($"{Base.Name} {statusCodition.StartMessage}");
     }
 
+    public bool OnStartTurn()
+    {
+        bool canPerforMovement = true;
+
+        if (statusCodition?.OnStartTurn != null)
+        {
+            if (!statusCodition.OnStartTurn(this))
+            {
+                canPerforMovement = false;
+            }
+        }
+
+        return canPerforMovement;
+    }
+
     //ataque random del enemigo
     public Move RandomMove()
     {
@@ -258,6 +273,11 @@ public class Pokemon
     public LearnableMove GetLearnablemOveAtCurentLevel()
     {
         return Base.LearnableMoves.Where(lm => lm.Level == _level).FirstOrDefault();
+    }
+
+    public void CureStatusCondition()
+    {
+        statusCodition = null;
     }
 
     public void learMove(LearnableMove learnableMove)

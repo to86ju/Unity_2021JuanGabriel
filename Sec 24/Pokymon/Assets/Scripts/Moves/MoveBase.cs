@@ -57,9 +57,11 @@ public class MoveStatEffect
 {
     [SerializeField] private List<StatBoosting> boostings;
     [SerializeField] private StatusConditionId status;
+    [SerializeField] private StatusConditionId volatileStatus;
     public List<StatBoosting> Boostings => boostings;
 
     public StatusConditionId Status => status;
+    public StatusConditionId VolatilesStatus => volatileStatus;
 }
 
 [System.Serializable]

@@ -6,6 +6,17 @@ using  Random = UnityEngine.Random;
 
 public class StatusConditionFactory 
 {
+    public static void InitFactory()
+    {
+        foreach (var condition in StatusConditions)
+        {
+            var id = condition.Key;
+            var statusCondition = condition.Value;
+
+            statusCondition.Id = id;
+        }
+    }
+
     public static Dictionary<StatusConditionId, StatusCondition> StatusConditions { get; set; } = 
         new Dictionary<StatusConditionId, StatusCondition>() 
         {
@@ -60,6 +71,79 @@ public class StatusConditionFactory
 
                 }
             },
+
+            {
+                StatusConditionId.slp,
+                new StatusCondition()
+                {
+                    Name = "Sleep",
+                    Descrption = "Hace que el Pokemon duerma durante un numero fijo de turnos",
+                    StartMessage = "se ha dormido",
+
+                    OnApplyStatusCondition = (Pokemon pokemon) =>
+                    {
+                        pokemon.StatusNumTurns = Random.Range(1,4);
+                        Debug.Log($"El pokemon dormira durante {pokemon.StatusNumTurns} turnos");
+                    },
+                    OnStartTurn = (Pokemon pokemon) =>
+                    {
+                        if (pokemon.StatusNumTurns <=0)
+                            {
+                                pokemon.CureStatusCondition();
+                                pokemon.StatusChangeMessages.Enqueue($"{pokemon.Base.Name} ha despertado!");
+                                return true;
+	                        }
+                        pokemon.StatusNumTurns --;
+                        pokemon.StatusChangeMessages.Enqueue($"{pokemon.Base.Name} sigue dormido.");
+                        return false;
+                    }
+                    
+
+                }
+            },
+
+            // ----------Estados Volatiles -----------------------
+            {
+                StatusConditionId.conf,
+                new StatusCondition()
+                {
+                    Name = "Confusión",
+                    Descrption = "Hace que el Pokemon esté confundido y pueda atcarse a si mismo",
+                    StartMessage = "ha sido confundido",
+
+                    OnApplyStatusCondition = (Pokemon pokemon) =>
+                    {
+                        pokemon.VolatilesStatusNumTurns = Random.Range(1,6);
+                        Debug.Log($"El pokemon estara confundido {pokemon.VolatilesStatusNumTurns} turnos");
+                    },
+                    OnStartTurn = (Pokemon pokemon) =>
+                    {
+                        if (pokemon.VolatilesStatusNumTurns <=0)
+                            {
+                                pokemon.CureVolatilesStatusCondition();
+                                pokemon.StatusChangeMessages.Enqueue($"{pokemon.Base.Name} ha salido del estado confusion");
+                                return true;
+                            }
+                        pokemon.VolatilesStatusNumTurns --;
+
+                        pokemon.StatusChangeMessages.Enqueue($"{pokemon.Base.Name} sigue confundido.");
+
+                        if (Random.Range(0,2) == 0)
+                        {
+                            return true;
+                        }
+
+                        //debemos dañarnos a nostros mismos por la confusión
+                        pokemon.UpdateHP(pokemon.MaxHp/6);
+
+                        pokemon.StatusChangeMessages.Enqueue("Tan cofuso que se hire a si mismo");
+
+                        return false;
+                    }
+
+
+                }
+            },
         };
 
     private static bool FrozenEffect(Pokemon pokemon)
@@ -100,5 +184,5 @@ public class StatusConditionFactory
 
 public enum StatusConditionId
 {
-    none, brn, frz, par, psn, slp
+    none, brn, frz, par, psn, slp, conf
 }

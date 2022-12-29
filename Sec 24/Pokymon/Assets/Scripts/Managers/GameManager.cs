@@ -26,8 +26,10 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         //Subcriberse al evento
+        StatusConditionFactory.InitFactory();
         playerController.OnPokemonEncountered += StartPokemonBattle;
         battleManager.OnBattleFinish += FinishPokemonBattle;
+
 
         SoundManager.sharedInstance.PlayMusic(worldclip);// Musica de poblado
     }

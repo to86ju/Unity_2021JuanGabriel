@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3084c743d51eb7f45b23b04e6b09c10a, type: 3}
+  m_Name: Jigglypuff
+  m_EditorClassIdentifier: 
+  ID: 39
+  name: Jigglypuff
+  description: Pokemon Cantador
+  frontSprite: {fileID: 21300000, guid: 011198342ea2d214b93a2ff742659d26, type: 3}
+  backSprite: {fileID: 21300000, guid: f7a4355d144e6784e9534c962ed83aa7, type: 3}
+  type1: 13
+  type2: 5
+  catchRate: 255
+  maxHP: 30
+  attack: 35
+  defense: 30
+  spAttack: 100
+  spDefense: 35
+  speed: 80
+  expBase: 64
+  grothRate: 0
+  learnebleMoves:
+  - move: {fileID: 11400000, guid: ae69717893e0caf4696f9d118544a962, type: 2}
+    level: 3
+  - move: {fileID: 11400000, guid: 4c20df268a2d44f49b5af8e9d74b3610, type: 2}
+    level: 5

@@ -15,7 +15,7 @@ public class ColorManager : MonoBehaviour
     public Color BarColor(float finalScale)
     {
 
-        if (finalScale < 0.15f)
+        if (finalScale < 0.20f)
         {
             return new Color(193f / 255, 45f / 255, 45f / 255);
         }
@@ -74,6 +74,25 @@ public class ColorManager : MonoBehaviour
         public static Color GetColorFromType(PokemonType type)
         {
             return colors[(int)type];
+        }
+    }
+
+    public class StatusConditionColor
+    {
+
+        private static Dictionary<StatusConditionId, Color> colors = new Dictionary<StatusConditionId, Color>
+        {
+            {StatusConditionId.none, Color.white },
+            {StatusConditionId.brn, new Color(223f/255, 134f/255, 67f/255) },
+            {StatusConditionId.frz, new Color(168f/255, 214f/255, 215f/255) },
+            {StatusConditionId.par, new Color(241f/255, 208f/255, 83f/255) },
+            {StatusConditionId.psn, new Color(147f/255, 73f/255, 156f/255) },
+            {StatusConditionId.slp, new Color(163f/255, 147f/255, 234f/255) }
+        };
+
+        public static Color GetColorFromStatusCondition(StatusConditionId id)
+        {
+            return colors[id];
         }
     }
 

@@ -58,7 +58,8 @@ public class Pokemon
         HasHPChanged = true;
 
         ResetBoostings();
-
+        statusCodition = null;
+        VolatilestatusCodition = null;
     }
 
 
@@ -72,7 +73,7 @@ public class Pokemon
         Stats.Add(Stat.SpDefense, Mathf.FloorToInt((_base.SpDefense * _level) / 100.0f) + 2);
         Stats.Add(Stat.Speed, Mathf.FloorToInt((_base.Speed * _level) / 100.0f) + 2);
 
-        MaxHp = Mathf.FloorToInt((_base.MaxHP * _level)/20.0f)+10;
+        MaxHp = Mathf.FloorToInt((_base.MaxHP * _level)/20.0f)+10+_level;
     }
 
     private void ResetBoostings()
@@ -156,8 +157,14 @@ public class Pokemon
     public Dictionary<Stat, int> StatsBoosted { get; private set; }
 
     public StatusCondition statusCodition { get; set; }
+    public int StatusNumTurns { get; set; }
+
+    public StatusCondition VolatilestatusCodition { get; set; }
+    public int VolatilesStatusNumTurns { get; set; }
 
     public Queue<string> StatusChangeMessages { get; private set; } = new Queue<string>(); //cola
+
+    public event Action OnStatusConditionChanged;
 
 
     public int Hp { get => _hp; set { _hp = value; _hp = Mathf.FloorToInt( Mathf.Clamp(_hp, 0, MaxHp)); } }
@@ -221,8 +228,26 @@ public class Pokemon
     //Metodo Estados alterados
     public void SetConditionStatus(StatusConditionId id)
     {
+        if (statusCodition != null)
+        {
+            return;
+        }
         statusCodition = StatusConditionFactory.StatusConditions[id];
+        statusCodition?.OnApplyStatusCondition?.Invoke(this);//estado alterado el dormido
         StatusChangeMessages.Enqueue($"{Base.Name} {statusCodition.StartMessage}");
+        OnStatusConditionChanged?.Invoke();
+    }
+
+    public void SetVolatileConditionStatus(StatusConditionId id)
+    {
+        if (VolatilestatusCodition != null)
+        {
+            return;
+        }
+        VolatilestatusCodition = StatusConditionFactory.StatusConditions[id];
+        VolatilestatusCodition?.OnApplyStatusCondition?.Invoke(this);//estado alterado el dormido
+        StatusChangeMessages.Enqueue($"{Base.Name} {VolatilestatusCodition.StartMessage}");
+        
     }
 
     public bool OnStartTurn()
@@ -232,6 +257,14 @@ public class Pokemon
         if (statusCodition?.OnStartTurn != null)
         {
             if (!statusCodition.OnStartTurn(this))
+            {
+                canPerforMovement = false;
+            }
+        }
+
+        if (VolatilestatusCodition?.OnStartTurn != null)
+        {
+            if (!VolatilestatusCodition.OnStartTurn(this))
             {
                 canPerforMovement = false;
             }
@@ -278,7 +311,14 @@ public class Pokemon
     public void CureStatusCondition()
     {
         statusCodition = null;
+        OnStatusConditionChanged?.Invoke();
     }
+
+    public void CureVolatilesStatusCondition()
+    {
+        VolatilestatusCodition = null;
+    }
+
 
     public void learMove(LearnableMove learnableMove)
     {
@@ -292,12 +332,14 @@ public class Pokemon
 
     public void OnBattleFinish()
     {
+        VolatilestatusCodition = null;
         ResetBoostings();
     }
 
     public void OnFinishTurn()
     {
         statusCodition?.OnFinishTur?.Invoke(this);
+        VolatilestatusCodition?.OnFinishTur?.Invoke(this);
     }
 }
 

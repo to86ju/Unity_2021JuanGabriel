@@ -557,6 +557,20 @@ public class BattleManager : MonoBehaviour
         }
         //-------------------------------------
 
+        //-------- Estados volatil -----------------------
+        if (move.Base.Effects.VolatilesStatus != StatusConditionId.none)
+        {
+            if (move.Base.Target == MoveTarget.Other)
+            {
+                target.SetVolatileConditionStatus(move.Base.Effects.VolatilesStatus);
+            }
+            else
+            {
+                aattackUnit.SetVolatileConditionStatus(move.Base.Effects.VolatilesStatus);
+            }
+        //-------------------------------------------------------
+        }
+
         yield return ShowStatsMessages(aattackUnit);
         yield return ShowStatsMessages(target);
     }

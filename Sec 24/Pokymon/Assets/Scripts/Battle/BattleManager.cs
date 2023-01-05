@@ -488,29 +488,55 @@ public class BattleManager : MonoBehaviour
         move.Pp--;
         yield return batteDialogBox.SetDialog($"{attackUnit.Pokemon.Base.Name} ha usado {move.Base.Name}");
 
-
-        yield return RunMoveAnims(attackUnit, target);       
-
-        if (move.Base.MoveType == MoveType.Stats)
+        //si el ataque no falla
+        if (MoveHits(move, attackUnit.Pokemon, target.Pokemon))
         {
 
-            yield return RunMoveStats(attackUnit.Pokemon, target.Pokemon, move);
+            yield return RunMoveAnims(attackUnit, target);
+
+            if (move.Base.MoveType == MoveType.Stats)
+            {
+
+                yield return RunMoveStats(attackUnit.Pokemon, target.Pokemon, move.Base.Effects, move.Base.Target);
+            }
+            else
+            {
+                var oldHPVal = target.Pokemon.Hp;
+
+                var damageDesc = target.Pokemon.ReceiveDamage(attackUnit.Pokemon, move);
+
+                yield return target.Hud.UpdatePokemonData();
+
+                yield return showDamageDescription(damageDesc);
+            }
+
+            //---Chequear posibles estados secundarios----
+            if (move.Base.SecondaryEfects != null && move.Base.SecondaryEfects.Count > 0)
+            {
+                foreach (var sec in move.Base.SecondaryEfects)
+                {
+                    if ((sec.Target == MoveTarget.Other && target.Pokemon.Hp > 0) || sec.Target == MoveTarget.Self && attackUnit.Pokemon.Hp > 0)
+                    {
+                        var rnd = Random.Range(0, 100);
+                        if (rnd < sec.Chance)
+                        {
+                            yield return RunMoveStats(attackUnit.Pokemon, target.Pokemon, sec, sec.Target);
+                        }
+                    }
+                }
+            }
+            //------------------------------------------------
+
+
+            if (target.Pokemon.Hp <= 0)
+            {
+                yield return HandlePokemonFainted(target);
+            }
         }
+        //si el atake falla
         else
         {
-            var oldHPVal = target.Pokemon.Hp;
-
-            var damageDesc = target.Pokemon.ReceiveDamage(attackUnit.Pokemon, move);
-
-            yield return target.Hud.UpdatePokemonData();
-
-            yield return showDamageDescription(damageDesc);
-        }
-
-
-        if (target.Pokemon.Hp <=0)
-        {
-            yield return HandlePokemonFainted(target);
+            yield return batteDialogBox.SetDialog($" El atque de {attackUnit.Pokemon.Base.name} ha fallado");
         }
 
         //Comprobar estados alterados como qumadura o envenenamiento a final de turno        
@@ -526,10 +552,10 @@ public class BattleManager : MonoBehaviour
     }
     //-----------------------------------------------------
 
-    IEnumerator RunMoveStats(Pokemon aattackUnit, Pokemon target, Move move)
+    IEnumerator RunMoveStats(Pokemon aattackUnit, Pokemon target, MoveStatEffect effect, MoveTarget movetarget)
     {
         // ---Stats Boosting----
-        foreach (var boost in move.Base.Effects.Boostings)
+        foreach (var boost in effect.Boostings)
         {
             if (boost.target == MoveTarget.Self)
             {
@@ -543,30 +569,30 @@ public class BattleManager : MonoBehaviour
         //-----------------------
 
         //---------- Estado alterado(Status Codition) ----------
-        if (move.Base.Effects.Status != StatusConditionId.none)
+        if (effect.Status != StatusConditionId.none)
         {
-            if(move.Base.Target == MoveTarget.Other)
+            if(movetarget == MoveTarget.Other)
             {
-                target.SetConditionStatus(move.Base.Effects.Status);
+                target.SetConditionStatus(effect.Status);
             }
 
             else
             {
-                aattackUnit.SetConditionStatus(move.Base.Effects.Status);
+                aattackUnit.SetConditionStatus(effect.Status);
             }
         }
         //-------------------------------------
 
         //-------- Estados volatil -----------------------
-        if (move.Base.Effects.VolatilesStatus != StatusConditionId.none)
+        if (effect.VolatilesStatus != StatusConditionId.none)
         {
-            if (move.Base.Target == MoveTarget.Other)
+            if (movetarget == MoveTarget.Other)
             {
-                target.SetVolatileConditionStatus(move.Base.Effects.VolatilesStatus);
+                target.SetVolatileConditionStatus(effect.VolatilesStatus);
             }
             else
             {
-                aattackUnit.SetVolatileConditionStatus(move.Base.Effects.VolatilesStatus);
+                aattackUnit.SetVolatileConditionStatus(effect.VolatilesStatus);
             }
         //-------------------------------------------------------
         }
@@ -586,6 +612,47 @@ public class BattleManager : MonoBehaviour
         target.PlayReciveAttackAnimation();
         SoundManager.sharedInstance.PlaySound(damageClip);
        
+    }
+
+    private bool MoveHits(Move move, Pokemon attacker, Pokemon target)
+    {
+        if (move.Base.Alwayshit)
+        {
+            return true;
+        }
+
+        float rnd = Random.Range(0, 100);
+        float moveAcc = move.Base.Accuracy;
+
+        float accuracy = attacker.StatsBoosted[Stat.Accuracy];
+        float evasion = target.StatsBoosted[Stat.Evasion];
+
+        float multiplierAcc = 1.0f + Mathf.Abs(accuracy) / 3.0f;// + -33%
+        float multiplierEvs = 1.0f + Mathf.Abs(evasion) / 3.0f;// + -33%
+
+        //----- acuracy--------------
+        if (accuracy > 0)
+        {
+            moveAcc *= multiplierAcc;
+        }
+        else
+        {
+            moveAcc /= multiplierAcc;
+        }
+        //---------------------------------
+
+        //-------- evasion ----------------
+        if (evasion > 0)
+        {
+            moveAcc /= multiplierEvs;
+        }
+        else
+        {
+            moveAcc *= multiplierEvs;
+        }
+        //------------------------------------
+
+        return rnd < moveAcc;
     }
 
 

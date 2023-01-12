@@ -15,6 +15,8 @@ public class Pokemon
 
     private List<Move> _move;
 
+    public Move CurrentMove { get; set; }
+
     //Vida actual de pokemon
     private int _hp;
 

@@ -12,6 +12,7 @@ public class MoveBase : ScriptableObject
     [SerializeField] private int accuracy;
     [SerializeField] private bool alwaysHIt;
     [SerializeField] private int pp;
+    [SerializeField] private int priority;
     [SerializeField] private MoveType moveType;
     [SerializeField] private MoveStatEffect effects;
     [SerializeField] private List<SecondaryMoveStatEffect> secondaryEffects;
@@ -24,7 +25,7 @@ public class MoveBase : ScriptableObject
     public int Accuracy => accuracy;
     public bool Alwayshit => alwaysHIt;
     public int Pp => pp;
-
+    public int Priority => priority;
     public MoveType MoveType => moveType;
 
     public MoveStatEffect Effects => effects;
